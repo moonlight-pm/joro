@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'">
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="main">
+      <div class="left">
+        <div class="buttons"></div>
+        <div class="tabs"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="right">
+        <input class="search" value="https://blackravenpost.com/">
+        <div class="content">
+          <div class="results"></div>
+          <webview class="content" src="https://blackravenpost.com/"></webview>
+        </div>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>

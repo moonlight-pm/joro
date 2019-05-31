@@ -1,0 +1,8 @@
+{
+  "name": "@joro/client",
+  "version": "0.0.0",
+  "dependencies": {
+    "scrape-it": "^5.1.4",
+    "url-parse-lax": "^3.0.0"
+  }
+}
