@@ -8,12 +8,7 @@
   "engines": {
     "node": "12.1.0"
   },
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "form-data": "^2.3.3",
-    "got": "^9.6.0",
-    "scrape-it": "^5.1.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "electron": "^5.0.1",
     "eslint": "^5.16.0",

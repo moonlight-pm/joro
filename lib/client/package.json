@@ -2,7 +2,16 @@
   "name": "@joro/client",
   "version": "0.0.0",
   "dependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
+    "@cerebral/react": "^4.1.1",
+    "cerebral": "^5.1.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "scrape-it": "^5.1.4",
+    "styled-components": "^4.2.1",
     "url-parse-lax": "^3.0.0"
   }
 }
