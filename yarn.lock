@@ -2885,6 +2885,10 @@ react-is@^16.3.2, react-is@^16.8.1, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
+react-keyboard-event-handler@naturalethic/react-keyboard-event-handler#pass-props-built:
+  version "1.4.1"
+  resolved "https://codeload.github.com/naturalethic/react-keyboard-event-handler/tar.gz/258afbdb2b1f879ff6016889c35044488af7043c"
+
 react-movable@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/react-movable/-/react-movable-2.0.2.tgz#0a6867bae9421e04b610137ec2b1acf830f8e5c7"

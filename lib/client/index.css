@@ -12,38 +12,3 @@
   outline: none;
   font-size: 1em;
 }
-
-.layout-splitter {
-  width: 5px;
-  background: red;
-}
-
-
-// main .right .content .results ul {
-//   margin: 0;
-//   list-style: none;
-//   padding-inline-start: 0;
-//   margin-block-start: 0;
-//   margin-block-end: 0;
-// }
-
-// main .right .content .results ul li {
-//   padding: 8px 20px;
-// }
-
-// main .right .content .results ul li div:nth-child(1) {
-//   color: #397de8;
-// }
-
-// main .right .content .results ul li div:nth-child(2) {
-//   font-size: 0.8em;
-//   color: grey;
-// }
-
-// main .right .content .results ul li.selected {
-//   background: #d8f1ef;
-// }
-
-// main .right .content webview {
-//   display: none;
-// }
