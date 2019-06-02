@@ -20,3 +20,7 @@
   -webkit-app-region: none;
   cursor: col-resize;
 }
+
+webview {
+  height: 100%;
+}
