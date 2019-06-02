@@ -17,6 +17,7 @@
     "scrape-it": "^5.1.4",
     "styletron-engine-atomic": "^1.3.0",
     "styletron-react": "^5.1.2",
-    "url-parse-lax": "^3.0.0"
+    "url-parse-lax": "^3.0.0",
+    "uuid": "^3.3.2"
   }
 }

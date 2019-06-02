@@ -12,3 +12,11 @@
   outline: none;
   font-size: 1em;
 }
+
+.gutter {
+  border-left: 1px solid #505050;
+  background: #353535;
+  border-right: 1px solid #717171;
+  -webkit-app-region: none;
+  cursor: col-resize;
+}
