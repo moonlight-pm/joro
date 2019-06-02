@@ -1,0 +1,9 @@
+{
+  "name": "@joro/state",
+  "version": "0.0.0",
+  "dependencies": {
+    "@cerebral/react": "^4.1.1",
+    "cerebral": "^5.1.1",
+    "lodash": "^4.17.11"
+  }
+}

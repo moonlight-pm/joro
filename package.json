@@ -1,5 +1,6 @@
 {
   "name": "joro",
+  "productName": "Joro",
   "version": "2.6.4",
   "private": true,
   "workspaces": [
