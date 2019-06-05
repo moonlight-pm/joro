@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import parseUrl from 'url-parse-lax'
 
-import { connect } from '@joro/state'
+import { connect } from '../../state'
 
 import Keyboard from './Keyboard'
 import Icon from './Icon'

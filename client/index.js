@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Container, app } from '@joro/state'
+import { Container, app } from '../state'
 
 import Main from './components/Main'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { connect } from '@joro/state'
+import { connect } from '../../state'
 
 import Keyboard from './Keyboard'
 import Search from './Search'

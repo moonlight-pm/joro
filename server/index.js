@@ -1,7 +1,10 @@
+const { autoUpdater } = require('electron-updater')
 const { resolve } = require('path')
 const { existsSync, readFileSync, writeFileSync } = require('fs')
 const { Menu, app, BrowserWindow, ipcMain } = require('electron')
 const { debounce } = require('lodash')
+
+process.chdir(app.getAppPath())
 
 const windows = new Set()
 // const utilityWindows = Set()
@@ -63,7 +66,14 @@ const menu = Menu.buildFromTemplate([
   }
 ])
 
+function checkForUpdates () {
+  autoUpdater.checkForUpdatesAndNotify()
+  setTimeout(checkForUpdates, 1800000)
+}
+
 app.on('ready', () => {
+  checkForUpdates()
+  // autoUpdater.checkForUpdates()
   Menu.setApplicationMenu(menu)
   const window = new BrowserWindow({
     frame: false,
@@ -110,4 +120,23 @@ ipcMain.on('state:save', (event, state) => {
 
 // ipcMain.on('utility:color', (event) => {
 
+// })
+
+// autoUpdater.on('checking-for-update', () => {
+//   console.log('UPDATER: checking')
+// })
+// autoUpdater.on('update-available', (info) => {
+//   console.log('UPDATER: available')
+// })
+// autoUpdater.on('update-not-available', (info) => {
+//   console.log('UPDATER: not available')
+// })
+// autoUpdater.on('error', (err) => {
+//   console.log('UPDATER: error', err)
+// })
+// autoUpdater.on('download-progress', (progressObj) => {
+//   console.log('UPDATER: downloading')
+// })
+// autoUpdater.on('update-downloaded', (info) => {
+//   autoUpdater.quitAndInstall()
 // })

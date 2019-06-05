@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import color from 'tinycolor2'
 
-import { connect } from '@joro/state'
+import { connect } from '../../state'
 
 import Icon from './Icon'
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { HuePicker } from 'react-color'
 
-import { connect } from '@joro/state'
+import { connect } from '../../state'
 
 import Icon from './Icon'
 
