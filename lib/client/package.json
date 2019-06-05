@@ -15,6 +15,7 @@
     "scrape-it": "^5.1.4",
     "styled-components": "^4.2.1",
     "stylus": "^0.54.5",
+    "tinycolor2": "^1.4.1",
     "url-parse-lax": "^3.0.0",
     "uuid": "^3.3.2"
   }
