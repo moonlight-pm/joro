@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const path = require('path')
+const minimist = require('minimist')
+const { last, camelCase } = require('lodash')
+const { find } = require('shelljs')
+
+function usage (scripts) {
+  console.log(`Usage: ${last(process.argv[1].split('/'))} <script>\n`)
+  const keyWidth = Object.keys(scripts).reduce((m, k) => Math.max(k.length, m), 0)
+  for (const key of Object.keys(scripts)) {
+    console.log(`  ${key.padEnd(keyWidth)} - ${scripts[key].description}`)
+  }
+  console.log('')
+}
+
+run()
+
+async function run () {
+  const scripts = {}
+  for (const file of find('scripts').filter(f => /\.js$/.test(f))) {
+    const key = /^scripts\/(.*).js/.exec(file)[1].replace(/\//g, ':').replace(/:index$/, '')
+    const description = (/^\/\/\s*(.*)/.exec(fs.readFileSync(file, 'utf8')) || [])[1] || 'Undocumented'
+    scripts[key] = {
+      description,
+      file
+    }
+  }
+  const script = process.argv[2]
+  if (!Object.keys(scripts).includes(script)) {
+    return usage(scripts)
+  }
+  const argv = minimist(process.argv.slice(3))
+  const options = argv._
+  for (const key of Object.keys(argv)) {
+    if (key === '_') continue
+    options[camelCase(key)] = argv[key]
+  }
+  const fn = require(path.resolve(scripts[script].file))
+  fn(options)
+}

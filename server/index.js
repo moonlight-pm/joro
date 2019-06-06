@@ -4,7 +4,13 @@ const { existsSync, readFileSync, writeFileSync } = require('fs')
 const { Menu, app, BrowserWindow, ipcMain } = require('electron')
 const { debounce } = require('lodash')
 
-process.chdir(app.getAppPath())
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
+console.log('ENV', process.env.NODE_ENV)
+console.log('DIR', app.getAppPath())
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
+process.env['__REACT_DEVTOOLS_GLOBAL_HOOK__'] = '({ isDisabled: true })'
 
 const windows = new Set()
 // const utilityWindows = Set()
@@ -86,11 +92,29 @@ app.on('ready', () => {
       webviewTag: true
     }
   })
-  window.webContents.openDevTools()
+  if (isDevelopment) {
+    window.webContents.openDevTools()
+    window.loadURL(`http://localhost:9999`)
+  } else {
+    console.log('PATH', resolve(app.getAppPath(), 'index.html'))
+    window.loadFile(resolve(app.getAppPath(), 'index.html'), {
+      extraHeaders: 'pragma: no-cache\n'
+    })
+    // console.log(formatUrl({
+    //   pathname: join(__dirname, 'index.html'),
+    //   protocol: 'file',
+    //   slashes: true
+    // }))
+    // window.loadURL(formatUrl({
+    //   pathname: join(__dirname, 'index.html'),
+    //   protocol: 'file',
+    //   slashes: true
+    // }))
+  }
 
-  window.loadFile(resolve(__dirname, '..', 'client', 'index.html'), {
-    extraHeaders: 'pragma: no-cache\n'
-  })
+  // window.loadFile(resolve(__dirname, '..', 'client', 'index.html'), {
+  //   extraHeaders: 'pragma: no-cache\n'
+  // })
   windows.add(window)
   window.on('closed', () => {
     windows.delete(window)

@@ -1,0 +1,16 @@
+{
+  "name": "joro",
+  "productName": "Joro",
+  "description": "A web browser",
+  "author": {
+    "name": "moonlight(pm)",
+    "email": "hello@moonlight.pm"
+  },
+  "version": "0.0.8",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "12.1.0"
+  },
+  "main": "main.js"
+}

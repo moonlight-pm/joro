@@ -1,25 +1,8 @@
 <!doctype html>
 <html>
   <head>
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"> -->
-    <link rel="stylesheet" href="index.css">
   </head>
   <body>
     <root></root>
-    <script>
-      require('@babel/register')({
-        presets: [
-          [
-            "@babel/preset-env", {
-              targets: {
-                electron: "5"
-              }
-            }
-          ],
-          "@babel/preset-react"
-        ]
-      })
-      require('./index')
-    </script>
   </body>
 </html>

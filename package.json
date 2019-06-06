@@ -6,7 +6,7 @@
     "name": "moonlight(pm)",
     "email": "hello@moonlight.pm"
   },
-  "version": "0.0.6",
+  "version": "0.0.8",
   "private": true,
   "license": "UNLICENSED",
   "engines": {
@@ -14,14 +14,19 @@
   },
   "main": "server/index.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder",
-    "deploy": "electron-builder --publish always"
+    "client": "webpack-dev-server --config client/webpack.config.js",
+    "server": "electron .",
+    "client:build": "webpack --config client/webpack.config.js",
+    "server:build": "webpack --config server/webpack.config.js",
+    "build": "NODE_ENV=production yarn client:build && yarn server:build && cp build/package.json dist/pack && electron-builder",
+    "deploy": "NODE_ENV=production yarn client:build && yarn server:build && cp build/package.json dist/pack && electron-builder --publish always"
   },
   "build": {
+    "directories": {
+      "app": "dist/pack"
+    },
     "appId": "pm.moonlight.joro",
     "productName": "Joro",
-    "asar": false,
     "publish": {
       "provider": "github",
       "releaseType": "release"
@@ -34,34 +39,21 @@
       "entitlements": "build/entitlements.plist",
       "entitlementsInherit": "build/entitlements.plist"
     },
-    "afterSign": "build/notarize.js"
+    "afterSign": "build/after-sign.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.4.4",
     "@cerebral/react": "^4.1.1",
+    "babel-loader": "^8.0.6",
     "cerebral": "^5.1.1",
-    "electron-updater": "^4.0.6",
-    "lodash": "^4.17.11",
-    "react": "^16.8.6",
-    "react-color": "^2.17.3",
-    "react-dom": "^16.8.6",
-    "react-keyboard-event-handler": "^1.4.1",
-    "react-split": "^2.0.4",
-    "scrape-it": "^5.1.4",
-    "styled-components": "^4.2.1",
-    "stylus": "^0.54.5",
-    "tinycolor2": "^1.4.1",
-    "url-parse-lax": "^3.0.0",
-    "uuid": "^3.3.2"
-  },
-  "devDependencies": {
+    "chokidar": "^3.0.1",
     "dotenv": "^8.0.0",
     "electron": "^5.0.1",
     "electron-builder": "^20.43.0",
     "electron-notarize": "^0.1.1",
+    "electron-updater": "^4.0.6",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-standard-react": "^7.0.2",
@@ -69,6 +61,24 @@
     "eslint-plugin-node": "^9.0.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-react": "^7.13.0",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-standard": "^4.0.0",
+    "file-loader": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "lodash": "^4.17.11",
+    "minimist": "^1.2.0",
+    "react": "^16.8.6",
+    "react-color": "^2.17.3",
+    "react-dom": "^16.8.6",
+    "react-keyboard-event-handler": "^1.4.1",
+    "react-split": "^2.0.4",
+    "scrape-it": "^5.1.4",
+    "shelljs": "^0.8.3",
+    "styled-components": "^4.2.1",
+    "tinycolor2": "^1.4.1",
+    "url-parse-lax": "^3.0.0",
+    "uuid": "^3.3.2",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.6.0"
   }
 }
