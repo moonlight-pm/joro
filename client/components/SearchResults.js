@@ -37,7 +37,9 @@ export default connect('search',
           {search.items.map((item, index) => (
             <SearchResult key={item.url} selected={index === search.index}>
               <SearchResultTitle>{item.title}</SearchResultTitle>
-              <SearchResultBlurb>{item.blurb}</SearchResultBlurb>
+              <SearchResultBlurb>{item.content}</SearchResultBlurb>
+              {/* <SearchResultTitle dangerouslySetInnerHTML={{ __html: item.title }} />
+              <SearchResultBlurb dangerouslySetInnerHTML={{ __html: item.blurb }} /> */}
             </SearchResult>
           ))}
         </SearchResults>

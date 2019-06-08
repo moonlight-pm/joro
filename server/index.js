@@ -1,8 +1,10 @@
-const { autoUpdater } = require('electron-updater')
-const { resolve } = require('path')
-const { existsSync, readFileSync, writeFileSync } = require('fs')
-const { Menu, app, BrowserWindow, ipcMain } = require('electron')
-const { debounce } = require('lodash')
+// electron-updater is huge, find an alternative
+
+import { autoUpdater } from 'electron-updater'
+import { resolve } from 'path'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
+import { Menu, app, BrowserWindow, ipcMain } from 'electron'
+import debounce from 'lodash/debounce'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -89,7 +91,8 @@ app.on('ready', () => {
       allowRunningInsecureContent: true,
       contextIsolation: false,
       nodeIntegration: true,
-      webviewTag: true
+      webviewTag: true,
+      webSecurity: !isDevelopment
     }
   })
   if (isDevelopment) {

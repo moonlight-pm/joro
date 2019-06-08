@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 
 import iconDelete from '../assets/icons/delete.svg'
 import iconPrism from '../assets/icons/prism.svg'

@@ -10,11 +10,18 @@ import Browser from './Browser'
 import SearchResults from './SearchResults'
 
 import fontFiraSansCondensedRegular from '../assets/fonts/FiraSansCondensed/FiraSansCondensed-Regular.ttf'
+import fontFiraSansCondensedBold from '../assets/fonts/FiraSansCondensed/FiraSansCondensed-Bold.ttf'
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Fira Sans Condensed';
     src: url(${fontFiraSansCondensedRegular});
+  }
+
+  @font-face {
+    font-family: 'Fira Sans Condensed';
+    src: url(${fontFiraSansCondensedBold});
+    font-weight: bold;
   }
 
   * {

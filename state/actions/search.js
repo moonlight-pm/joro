@@ -1,8 +1,7 @@
 /* global fetch AbortController */
 
-import { scrapeHTML as scrape } from 'scrape-it'
 import { state } from 'cerebral'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 
 let searchController
 
@@ -28,23 +27,14 @@ export default {
     searchController = new AbortController()
     store.set(state`search.loading`, true)
     const params = new URLSearchParams()
-    params.append('query', props.query)
-    const url = `https://www.startpage.com/do/search?${params}`
+    params.append('format', 'json')
+    params.append('q', props.query)
+    const url = `https://searx.org/search?${params}`
     try {
       const response = await fetch(url, { signal: searchController.signal })
-      const html = await response.text()
-      const { items } = scrape(html, {
-        items: {
-          listItem: 'li.search-result',
-          data: {
-            url: '.search-item__url',
-            title: '.search-item__title > a',
-            blurb: '.search-item__body'
-          }
-        }
-      })
+      const results = (await response.json()).results
       store.set(state`search.loading`, false)
-      store.set(state`search.items`, items)
+      store.set(state`search.items`, results)
     } catch (e) {
     }
   }, 200),

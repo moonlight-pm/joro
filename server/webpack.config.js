@@ -1,4 +1,5 @@
 const { resolve } = require('path')
+const Visualizer = require('webpack-visualizer-plugin')
 
 const dist = resolve('dist', 'pack')
 
@@ -13,7 +14,23 @@ module.exports = {
   module: {
     rules: [{
       test: /\.js$/,
-      use: 'babel-loader'
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['@babel/env', {
+              targets: {
+                electron: '5'
+              }
+            }]
+          ]
+        }
+      }
     }]
-  }
+  },
+  plugins: [
+    new Visualizer({
+      filename: '../main.html'
+    })
+  ]
 }

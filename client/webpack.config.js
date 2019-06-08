@@ -1,6 +1,8 @@
 const { resolve } = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlPlugin = require('html-webpack-plugin')
+const VisualizerPlugin = require('webpack-visualizer-plugin')
 const { DefinePlugin } = require('webpack')
+const LodashPlugin = require('lodash-webpack-plugin')
 
 const dist = resolve('dist', 'pack')
 
@@ -25,6 +27,9 @@ module.exports = {
               }
             }],
             ['@babel/react', {}]
+          ],
+          plugins: [
+            'lodash'
           ]
         }
       }
@@ -34,12 +39,16 @@ module.exports = {
     }]
   },
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlPlugin({
       template: resolve(__dirname, 'index.html')
     }),
     new DefinePlugin({
       __REACT_DEVTOOLS_GLOBAL_HOOK__: '({ isDisabled: true })'
-    })
+    }),
+    new VisualizerPlugin({
+      filename: '../renderer.html'
+    }),
+    new LodashPlugin()
   ],
   devtool: 'inline-source-map',
   devServer: {
