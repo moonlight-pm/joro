@@ -1,6 +1,3 @@
-// electron-updater is huge, find an alternative
-
-import { autoUpdater } from 'electron-updater'
 import { resolve } from 'path'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Menu, app, BrowserWindow, ipcMain } from 'electron'
@@ -15,7 +12,6 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
 process.env['__REACT_DEVTOOLS_GLOBAL_HOOK__'] = '({ isDisabled: true })'
 
 const windows = new Set()
-// const utilityWindows = Set()
 
 const menu = Menu.buildFromTemplate([
   {
@@ -74,14 +70,7 @@ const menu = Menu.buildFromTemplate([
   }
 ])
 
-function checkForUpdates () {
-  autoUpdater.checkForUpdatesAndNotify()
-  setTimeout(checkForUpdates, 1800000)
-}
-
 app.on('ready', () => {
-  checkForUpdates()
-  // autoUpdater.checkForUpdates()
   Menu.setApplicationMenu(menu)
   const window = new BrowserWindow({
     frame: false,
@@ -103,21 +92,7 @@ app.on('ready', () => {
     window.loadFile(resolve(app.getAppPath(), 'index.html'), {
       extraHeaders: 'pragma: no-cache\n'
     })
-    // console.log(formatUrl({
-    //   pathname: join(__dirname, 'index.html'),
-    //   protocol: 'file',
-    //   slashes: true
-    // }))
-    // window.loadURL(formatUrl({
-    //   pathname: join(__dirname, 'index.html'),
-    //   protocol: 'file',
-    //   slashes: true
-    // }))
   }
-
-  // window.loadFile(resolve(__dirname, '..', 'client', 'index.html'), {
-  //   extraHeaders: 'pragma: no-cache\n'
-  // })
   windows.add(window)
   window.on('closed', () => {
     windows.delete(window)
@@ -144,26 +119,3 @@ const flushState = debounce((state) => {
 ipcMain.on('state:save', (event, state) => {
   flushState(state)
 })
-
-// ipcMain.on('utility:color', (event) => {
-
-// })
-
-// autoUpdater.on('checking-for-update', () => {
-//   console.log('UPDATER: checking')
-// })
-// autoUpdater.on('update-available', (info) => {
-//   console.log('UPDATER: available')
-// })
-// autoUpdater.on('update-not-available', (info) => {
-//   console.log('UPDATER: not available')
-// })
-// autoUpdater.on('error', (err) => {
-//   console.log('UPDATER: error', err)
-// })
-// autoUpdater.on('download-progress', (progressObj) => {
-//   console.log('UPDATER: downloading')
-// })
-// autoUpdater.on('update-downloaded', (info) => {
-//   autoUpdater.quitAndInstall()
-// })
