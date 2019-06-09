@@ -29,7 +29,7 @@ export default {
     const params = new URLSearchParams()
     params.append('format', 'json')
     params.append('q', props.query)
-    const url = `https://searx.org/search?${params}`
+    const url = `https://blackravenpost.com/search?${params}`
     try {
       const response = await fetch(url, { signal: searchController.signal })
       const results = (await response.json()).results
