@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 
-import { connect } from '../../state'
+import { connect } from '../state'
 
 export default connect('tabs',
   function ({ tabs, id }) {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { HuePicker } from 'react-color'
+import tinycolor from 'tinycolor2'
 
-import { connect } from '../../state'
+import { connect } from '../state'
 
 import Icon from './Icon'
 
@@ -58,17 +59,17 @@ const ColorPicker = styled.div.attrs(({ background, show }) => ({
 
 `
 
-export default connect('sessions', 'tabs',
-  function ({ sessions, tabs }) {
+export default connect('sessions', 'tabs', 'colors',
+  function ({ sessions, tabs, colors, set }) {
     const [ showColors, setShowColors ] = useState(false)
     return (
       <Location>
-        <LocationUrl color={sessions.default.foreground}>
+        <LocationUrl color={colors.foreground}>
           {tabs.current && tabs.items[tabs.current].url}
         </LocationUrl>
         <Icon
           name='prism'
-          color={sessions.default.foreground}
+          color={colors.foreground}
           size={28}
           margin={4}
           forceShowInner={showColors}
@@ -78,11 +79,14 @@ export default connect('sessions', 'tabs',
           }}
         />
         <div style={{ width: '4px' }} />
-        <ColorPicker show={showColors} background={sessions.default.background}>
+        <ColorPicker show={showColors} background={colors.background}>
           <HuePicker
-            color={sessions.default.background}
+            color={colors.background}
             onChange={color => {
-              sessions.color({ color: color.hex })
+              colors.set({
+                'background': color.hex,
+                'foreground': tinycolor(color.hex.color).getLuminance() < 0.65 ? 'white' : 'black'
+              })
             }}
           />
         </ColorPicker>

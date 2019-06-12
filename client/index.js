@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Container, app } from '../state'
+import { Container, store } from './state'
 
 import Main from './components/Main'
 
 document.addEventListener('DOMContentLoaded', async () => {
   ReactDOM.render(
-    <Container app={app}>
+    <Container app={store}>
       <Main />
     </Container>,
     document.querySelector('root')

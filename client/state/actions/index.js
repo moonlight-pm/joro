@@ -1,9 +1,9 @@
-import sessions from './sessions'
+import colors from './colors'
 import tabs from './tabs'
 import search from './search'
 
 const actions = {
-  sessions,
+  colors,
   tabs,
   search
 }

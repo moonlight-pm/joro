@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import color from 'tinycolor2'
 
-import { connect } from '../../state'
+import { connect } from '../state'
 
 import Icon from './Icon'
 
@@ -48,12 +48,12 @@ const Delete = styled(Icon).attrs(() => ({
   opacity: 0.5;
 `
 
-export default connect('sessions', 'tabs',
-  function ({ sessions, tabs, id }) {
+export default connect('sessions', 'tabs', 'colors',
+  function ({ sessions, tabs, colors, id }) {
     return (
       <Tab
-        background={sessions.default.background}
-        foreground={sessions.default.foreground}
+        background={colors.background}
+        foreground={colors.foreground}
         selected={id === tabs.current}
         onClick={() => tabs.select({ id })}
       >

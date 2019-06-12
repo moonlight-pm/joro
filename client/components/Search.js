@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import parseUrl from 'url-parse-lax'
 
-import { connect } from '../../state'
+import { connect } from '../state'
 
 import Keyboard from './Keyboard'
 import Icon from './Icon'
@@ -56,8 +56,8 @@ const Tao = styled(Icon).attrs(({ show }) => ({
   }
 `
 
-export default connect('sessions', 'search', 'tabs',
-  function ({ sessions, search, tabs }) {
+export default connect('sessions', 'search', 'tabs', 'colors',
+  function ({ sessions, search, tabs, colors }) {
     return (
       <Search>
         <Keyboard handleKeys={['enter', 'ctrl', 'meta']} onKeyEvent={(key, event) => {
@@ -95,7 +95,7 @@ export default connect('sessions', 'search', 'tabs',
         }}>
           <SearchInput />
         </Keyboard>
-        <Tao show={search.loading} color={sessions.default.background} />
+        <Tao show={search.loading} color={colors.background} />
       </Search>
     )
   })

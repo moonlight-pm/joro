@@ -12,10 +12,8 @@ export default {
     items: [],
     index: 0
   },
-  sessions: {
-    default: {
-      background: '#323234',
-      foreground: 'white'
-    }
+  colors: {
+    background: '#323234',
+    foreground: 'white'
   }
 }

@@ -67,6 +67,7 @@
     "lodash": "^4.17.11",
     "lodash-webpack-plugin": "^0.11.5",
     "minimist": "^1.2.0",
+    "object-observer": "^2.1.0",
     "react": "^16.8.6",
     "react-color": "^2.17.3",
     "react-dom": "^16.8.6",

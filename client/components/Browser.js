@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Splitter from 'react-split'
 
-import { connect } from '../../state'
+import { connect } from '../state'
 
 import Tabs from './Tabs'
 import Content from './Content'

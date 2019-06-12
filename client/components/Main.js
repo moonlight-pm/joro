@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 
-import { connect } from '../../state'
+import { connect } from '../state'
 
 import Keyboard from './Keyboard'
 import Search from './Search'
@@ -55,10 +55,10 @@ const Main = styled.main.attrs(({ background }) => ({
   filter: saturate(30%);
 `
 
-export default connect('sessions', 'search',
-  function ({ sessions, search }) {
+export default connect('sessions', 'search', 'colors',
+  function ({ sessions, search, colors }) {
     return (
-      <Main background={sessions.default.background}>
+      <Main background={colors.background}>
         <GlobalStyle />
         {search.active ? <Search /> : <Location />}
         <Browser />

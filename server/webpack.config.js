@@ -1,12 +1,14 @@
 const { resolve } = require('path')
 const Visualizer = require('webpack-visualizer-plugin')
 
+const PRODUCTION = process.env.NODE_ENV === 'production'
+
 const dist = resolve('dist', 'pack')
 
 module.exports = {
   target: 'electron-main',
   entry: resolve(__dirname, 'index.js'),
-  mode: process.env.NODE_ENV !== 'production' ? 'development' : 'production',
+  mode: PRODUCTION ? 'production' : 'development',
   output: {
     filename: 'main.js',
     path: dist

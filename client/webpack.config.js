@@ -4,12 +4,14 @@ const VisualizerPlugin = require('webpack-visualizer-plugin')
 const { DefinePlugin } = require('webpack')
 const LodashPlugin = require('lodash-webpack-plugin')
 
+const PRODUCTION = process.env.NODE_ENV === 'production'
+
 const dist = resolve('dist', 'pack')
 
 module.exports = {
   target: 'electron-renderer',
   entry: resolve(__dirname, 'index.js'),
-  mode: process.env.NODE_ENV !== 'production' ? 'development' : 'production',
+  mode: PRODUCTION ? 'production' : 'development',
   output: {
     filename: 'renderer.js',
     path: dist
