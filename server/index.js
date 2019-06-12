@@ -1,4 +1,7 @@
 import { Menu, app } from 'electron'
+import { readdirSync } from 'fs'
+import { resolve } from 'path'
+import { rm } from 'shelljs'
 
 import menu from './menu'
 import { createSession } from './commands'
@@ -6,10 +9,14 @@ import state from './state'
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
 
-console.log('PRODUCTION', PRODUCTION)
-console.log('DIR', app.getAppPath())
-
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
+
+for (const partition of readdirSync(resolve(app.getPath('userData'), 'Partitions'))) {
+  if (!state.sessions[partition]) {
+    console.log('DELETING', resolve(app.getPath('userData'), 'Partitions', partition))
+    rm('-rf', resolve(app.getPath('userData'), 'Partitions', partition))
+  }
+}
 
 app.on('ready', () => {
   Menu.setApplicationMenu(menu)
@@ -20,12 +27,4 @@ app.on('ready', () => {
   if (Object.keys(state.sessions).length === 0) {
     createSession()
   }
-})
-
-app.on('window-all-closed', () => {
-  console.log('Quitting')
-  app.quit()
-})
-
-app.on('activate', () => {
 })

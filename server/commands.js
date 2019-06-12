@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron'
 import { resolve } from 'path'
-import { rm } from 'shelljs'
 import uuid from 'uuid'
 
 import state from './state'
@@ -10,7 +9,6 @@ const PRODUCTION = process.env.NODE_ENV === 'production'
 app.windows = {}
 
 export function createSession (id = uuid()) {
-  // const id = uuid()
   console.log('ID', id)
   const window = new BrowserWindow({
     frame: false,
@@ -33,20 +31,16 @@ export function createSession (id = uuid()) {
   } else {
     window.loadURL(`http://localhost:9999`)
   }
-  window.on('closed', (event) => {
-    console.log('CLOSE', window.destroyPartition)
-    if (window.destroyPartition) {
-      rm('-rf', resolve(app.getPath('userData'), 'Partitions', window.uuid))
-    }
-  })
   app.windows[id] = window
   state.sessions[id] = {}
 }
 
 export function destroySession () {
   const window = BrowserWindow.getFocusedWindow()
-  window.destroyPartition = true
-  window.close()
+  window.webContents.session.clearCache(() => {})
+  window.webContents.session.clearHostResolverCache()
+  window.webContents.session.clearStorageData()
   delete app.windows[window.uuid]
-  console.log(window.uuid)
+  delete state.sessions[window.uuid]
+  window.close()
 }
