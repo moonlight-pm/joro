@@ -7,11 +7,11 @@ import { Observable } from 'object-observer/dist/node/object-observer'
 const statePath = resolve(app.getPath('userData'), 'state.json')
 
 const state = Observable.from({
-  sessions: []
+  sessions: {}
 })
 
 if (existsSync(statePath)) {
-  merge(state, JSON.parse(readFileSync('statePath', 'utf8')))
+  merge(state, JSON.parse(readFileSync(statePath, 'utf8')))
 }
 
 // const windows = new Set()

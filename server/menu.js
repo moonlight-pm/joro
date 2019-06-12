@@ -1,9 +1,9 @@
-import { Menu, app } from 'electron'
+import { app, Menu, BrowserWindow } from 'electron'
 
 // import { store } from '../state'
-import { createSession } from './commands'
+import { createSession, destroySession } from './commands'
 
-export default Menu.buildFromTemplate([
+const menu = Menu.buildFromTemplate([
   {
     label: app.getName(),
     submenu: [
@@ -32,10 +32,10 @@ export default Menu.buildFromTemplate([
     ]
   },
   {
-    label: 'Session',
+    label: 'Window',
     submenu: [
       {
-        label: 'New',
+        label: 'New Session',
         accelerator: 'CommandOrControl+N',
         click () {
           createSession()
@@ -43,16 +43,25 @@ export default Menu.buildFromTemplate([
       },
       { type: 'separator' },
       {
-        label: 'Destroy',
+        id: 'destroy',
+        label: 'Destroy Session',
         accelerator: 'CommandOrControl+W',
+        enabled: false,
         click () {
+          destroySession()
         }
-      }
-    ]
-  },
-  {
-    label: 'Window',
-    submenu: [
+      },
+      { type: 'separator' },
+      {
+        id: 'devtools',
+        label: 'Open Developer Tools',
+        enabled: false,
+        click () {
+          const window = BrowserWindow.getFocusedWindow()
+          window && window.webContents.openDevTools()
+        }
+      },
+      { type: 'separator' },
       { role: 'minimize' },
       { role: 'zoom' },
       { type: 'separator' },
@@ -60,3 +69,17 @@ export default Menu.buildFromTemplate([
     ]
   }
 ])
+
+app.on('browser-window-blur', () => {
+  menu.getMenuItemById('destroy').enabled = false
+  menu.getMenuItemById('devtools').enabled = false
+})
+
+app.on('browser-window-focus', () => {
+  menu.getMenuItemById('destroy').enabled = true
+  menu.getMenuItemById('devtools').enabled = true
+})
+
+// console.log('MENU', )
+
+export default menu
