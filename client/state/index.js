@@ -1,6 +1,7 @@
+import { ipcRenderer } from 'electron'
 import cerebral, { state, sequences } from 'cerebral'
 import { Container, connect as cerebralConnect } from '@cerebral/react'
-import { initial, last } from 'lodash'
+import { initial, last, omit, merge } from 'lodash'
 
 import actions from './actions'
 import defaults from './defaults'
@@ -36,6 +37,8 @@ function connect (...args) {
   )
 }
 
+merge(defaults, ipcRenderer.sendSync('state:load'))
+
 const store = cerebral({
   state: defaults,
   sequences: actions
@@ -43,6 +46,12 @@ const store = cerebral({
   devtools: !PRODUCTION && require('cerebral/devtools').default({
     host: 'localhost:3001'
   })
+})
+
+store.on('mutation', (changes) => {
+  ipcRenderer.send('state:save', omit(store.getState(), [
+    'search'
+  ]))
 })
 
 export { Container, connect, store }

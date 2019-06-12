@@ -1,4 +1,4 @@
-import { Menu, app } from 'electron'
+import { BrowserWindow, Menu, app, ipcMain } from 'electron'
 import { readdirSync } from 'fs'
 import { resolve } from 'path'
 import { rm } from 'shelljs'
@@ -27,4 +27,14 @@ app.on('ready', () => {
   if (Object.keys(state.sessions).length === 0) {
     createSession()
   }
+})
+
+ipcMain.on('state:save', (event, sessionState) => {
+  const window = BrowserWindow.fromWebContents(event.sender)
+  state.sessions[window.uuid].state = sessionState
+})
+
+ipcMain.on('state:load', (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender)
+  event.returnValue = state.sessions[window.uuid].state
 })

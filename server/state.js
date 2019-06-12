@@ -15,7 +15,6 @@ if (existsSync(statePath)) {
 }
 
 state.observe(() => {
-  console.log('STATE', JSON.stringify(state))
   writeFileSync(statePath, JSON.stringify(state, null, 2))
 })
 

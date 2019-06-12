@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { resolve } from 'path'
+import { merge } from 'lodash'
 import uuid from 'uuid'
 
 import state from './state'
@@ -10,10 +11,21 @@ app.windows = {}
 
 export function createSession (id = uuid()) {
   console.log('ID', id)
+  state.sessions[id] = merge({
+    bounds: {
+      x: 100,
+      y: 100,
+      width: 1000,
+      height: 1000
+    }
+  }, (state.sessions[id] || {}))
   const window = new BrowserWindow({
+    show: false,
     frame: false,
-    width: 800,
-    height: 600,
+    x: state.sessions[id].bounds.x,
+    y: state.sessions[id].bounds.y,
+    width: state.sessions[id].bounds.width,
+    height: state.sessions[id].bounds.height,
     webPreferences: {
       allowRunningInsecureContent: true,
       contextIsolation: false,
@@ -32,7 +44,15 @@ export function createSession (id = uuid()) {
     window.loadURL(`http://localhost:9999`)
   }
   app.windows[id] = window
-  state.sessions[id] = {}
+  window.on('moved', (event, bounds) => {
+    state.sessions[id].bounds = window.getBounds()
+  })
+  window.on('resize', (event, bounds) => {
+    state.sessions[id].bounds = window.getBounds()
+  })
+  window.once('ready-to-show', () => {
+    window.show()
+  })
 }
 
 export function destroySession () {
