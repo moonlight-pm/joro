@@ -24,12 +24,13 @@ const Location = styled.div`
   }
 `
 
-const LocationUrl = styled.div.attrs(({ color }) => ({
+const LocationUrl = styled.div.attrs(({ show, color }) => ({
   style: {
+    visibility: show ? '' : 'hidden',
     color
   }
 }))`
-  padding: 1px 25px;
+  padding: 1px 14px;
   flex-grow: 1;
   line-height: 36px;
   /* text-shadow: 0px 0px 3px black; */
@@ -43,7 +44,7 @@ const ColorPicker = styled.div.attrs(({ background, show }) => ({
 }))`
   position: absolute;
   top: 0px;
-  right: 72px;
+  left: 37px;
   padding: 10px;
   padding-left: 16px;
   border-top-left-radius: 5px;
@@ -78,21 +79,37 @@ const VaultLogin = styled.form.attrs(({ show }) => ({
   }
 `
 
+const VaultMenu = styled.form.attrs(({ show, color }) => ({
+  style: {
+    display: show ? 'block' : 'none',
+    color: color
+  }
+}))`
+  position: absolute;
+  top: 9px;
+  right: 44px;
+  -webkit-app-region: none;
+  span {
+    text-decoration: underline;
+    margin-right: 8px;
+  }
+`
+
 export default connect('sessions', 'tabs', 'colors', 'vault',
   function ({ sessions, tabs, colors, vault }) {
     const usernameInput = useRef()
     const [showColors, setShowColors] = useState(false)
     const [showVaultLogin, setShowVaultLogin] = useState(false)
+    const [showVaultMenu, setShowVaultMenu] = useState(false)
     useEffect(() => {
       if (showVaultLogin) {
         usernameInput.current.focus()
       }
     }, [showVaultLogin])
+    const tab = tabs.current && tabs.items[tabs.current]
     return (
       <Location>
-        <LocationUrl color={colors.foreground}>
-          {tabs.current && tabs.items[tabs.current].url}
-        </LocationUrl>
+        <div style={{ width: '4px' }} />
         <Icon
           name='prism'
           color={colors.foreground}
@@ -104,14 +121,21 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
             setShowColors(!showColors)
           }}
         />
+        <LocationUrl color={colors.foreground} show={!showColors}>
+          {tab && tab.url}
+        </LocationUrl>
         <Icon
           name='chain'
-          color={colors.foreground}
+          color={vault.items ? colors.foreground : '#666666'}
           size={20}
           margin={8}
           onClick={event => {
             event.stopPropagation()
-            setShowVaultLogin(true)
+            if (vault.items) {
+              setShowVaultMenu(!showVaultMenu)
+            } else {
+              setShowVaultLogin(!showVaultLogin)
+            }
           }}
         />
         <div style={{ width: '4px' }} />
@@ -142,6 +166,14 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
           <input name='password' type='password' />
           <button type='submit' style={{ display: 'none' }} />
         </VaultLogin>
+        <VaultMenu show={showVaultMenu} color={colors.foreground}>
+          {/* <span>Logout</span> */}
+          {tab && tab.logins && tab.logins.map(l => (
+            <span key={l} onClick={() => {
+              tabs.login({ login: vault.items[l].login })
+            }}>{vault.items[l].login.username}</span>
+          ))}
+        </VaultMenu>
       </Location>
     )
   })

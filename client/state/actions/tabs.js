@@ -1,6 +1,5 @@
 import { state } from 'cerebral'
 import uuid from 'uuid'
-import parseUrl from 'url-parse-lax'
 
 export default {
   create ({ store, get, props }) {
@@ -20,8 +19,12 @@ export default {
 
   update ({ store, get, props }) {
     const tab = Object.assign(get(state`tabs.items.${props.id}`), props)
-    const url = parseUrl(tab.url)
-    console.log(url)
+    const vault = get(state`vault`)
+    if (vault.items) {
+      tab.logins = Object.values(vault.items)
+        .filter(i => tab.url.includes(i.name))
+        .map(i => i.id)
+    }
     store.set(state`tabs.items.${props.id}`, tab)
   },
 
@@ -41,5 +44,19 @@ export default {
     }
     store.splice(state`tabs.order`, index, 1)
     store.unset(state`tabs.items.${props.id}`)
+  },
+
+  login ({ get, store, props }) {
+    const { login } = props
+    const tabs = get(state`tabs`)
+    const i = tabs.order.indexOf(tabs.current)
+    const view = document.querySelectorAll('webview')[i]
+    view.executeJavaScript(`
+      document.querySelector('input[type=email]').value = '${login.username}'
+      document.querySelector('input[type=password]').value = '${login.password}'
+      document.querySelector('[type=submit]').click()
+    `)
+    // console.log(view)
+    // console.log(login)
   }
 }

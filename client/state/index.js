@@ -36,8 +36,9 @@ function connect (...args) {
     component
   )
 }
-
+console.log(ipc.sync.state.load())
 merge(defaults, ipc.sync.state.load())
+merge(defaults.vault, { items: ipc.sync.vault.sync() })
 
 const store = cerebral({
   state: defaults,
@@ -52,7 +53,7 @@ const store = cerebral({
 })
 
 store.on('mutation', (changes) => {
-  ipc.state.save({ data: omit(store.getState(), ['search']) })
+  ipc.state.save({ data: omit(store.getState(), ['search', 'vault']) })
 })
 
 export { Container, connect, store }

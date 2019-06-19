@@ -6,15 +6,15 @@ const sync = new Proxy({}, {
     return new Proxy({}, {
       get: function (obj, subprop) {
         return function (options) {
-          console.log(`${prop}:${subprop}`)
-          return ipcRenderer.sendSync(`${prop}:${subprop}`, [{}, options])
+          return JSON.parse(ipcRenderer.sendSync(`${prop}:${subprop}`, JSON.stringify([{}, options])))
         }
       }
     })
   }
 })
 
-function handler (event, { id, response }) {
+function handler (event, result) {
+  const { id, response } = JSON.parse(result)
   promises[id].resolve(response)
   delete promises[id]
 }
@@ -36,7 +36,7 @@ const rpc = new Proxy({}, {
           const id = uuid()
           return new Promise((resolve, reject) => {
             promises[id] = { resolve, reject }
-            ipcRenderer.send(`${prop}:${subprop}`, [{ id }, options])
+            ipcRenderer.send(`${prop}:${subprop}`, JSON.stringify([{ id }, options]))
           })
         }
       }

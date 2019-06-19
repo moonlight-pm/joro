@@ -25,7 +25,6 @@ ipc.register('state:save', ({ session, data }) => {
 })
 
 ipc.register('state:load', ({ session }) => {
-  console.log('LOADING STATE', session)
   return state.sessions[session].state
 })
 

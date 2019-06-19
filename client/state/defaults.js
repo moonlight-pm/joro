@@ -15,5 +15,8 @@ export default {
   colors: {
     background: '#323234',
     foreground: 'white'
+  },
+  vault: {
+    items: null
   }
 }
