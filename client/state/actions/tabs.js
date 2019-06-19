@@ -1,5 +1,6 @@
 import { state } from 'cerebral'
 import uuid from 'uuid'
+import parseUrl from 'url-parse-lax'
 
 export default {
   create ({ store, get, props }) {
@@ -19,6 +20,8 @@ export default {
 
   update ({ store, get, props }) {
     const tab = Object.assign(get(state`tabs.items.${props.id}`), props)
+    const url = parseUrl(tab.url)
+    console.log(url)
     store.set(state`tabs.items.${props.id}`, tab)
   },
 

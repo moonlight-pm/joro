@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, app, ipcMain } from 'electron'
+import { Menu, app } from 'electron'
 import { readdirSync } from 'fs'
 import { resolve } from 'path'
 import { rm } from 'shelljs'
@@ -6,7 +6,8 @@ import { rm } from 'shelljs'
 import menu from './menu'
 import { createSession } from './commands'
 import state from './state'
-import Passwords from './passwords'
+
+import './vault'
 
 // const PRODUCTION = process.env.NODE_ENV === 'production'
 
@@ -19,9 +20,6 @@ for (const partition of readdirSync(resolve(app.getPath('userData'), 'Partitions
   }
 }
 
-const passwords = new Passwords()
-passwords.init()
-
 app.on('ready', () => {
   Menu.setApplicationMenu(menu)
   app.focus()
@@ -31,14 +29,4 @@ app.on('ready', () => {
   if (Object.keys(state.sessions).length === 0) {
     createSession()
   }
-})
-
-ipcMain.on('state:save', (event, sessionState) => {
-  const window = BrowserWindow.fromWebContents(event.sender)
-  state.sessions[window.uuid].state = sessionState
-})
-
-ipcMain.on('state:load', (event) => {
-  const window = BrowserWindow.fromWebContents(event.sender)
-  event.returnValue = state.sessions[window.uuid].state
 })

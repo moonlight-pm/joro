@@ -1,11 +1,13 @@
 import colors from './colors'
 import tabs from './tabs'
 import search from './search'
+import vault from './vault'
 
 const actions = {
   colors,
   tabs,
-  search
+  search,
+  vault
 }
 
 const sequences = {}

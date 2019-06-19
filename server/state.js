@@ -4,6 +4,8 @@ import { app } from 'electron'
 import { merge } from 'lodash'
 import { Observable } from 'object-observer/dist/node/object-observer'
 
+import ipc from './ipc'
+
 const statePath = resolve(app.getPath('userData'), 'state.json')
 
 const state = Observable.from({
@@ -16,6 +18,15 @@ if (existsSync(statePath)) {
 
 state.observe(() => {
   writeFileSync(statePath, JSON.stringify(state, null, 2))
+})
+
+ipc.register('state:save', ({ session, data }) => {
+  state.sessions[session].state = data
+})
+
+ipc.register('state:load', ({ session }) => {
+  console.log('LOADING STATE', session)
+  return state.sessions[session].state
 })
 
 export default state

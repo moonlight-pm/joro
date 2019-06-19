@@ -5,11 +5,13 @@ import pick from 'lodash/pick'
 import iconDelete from '../assets/icons/delete.svg'
 import iconPrism from '../assets/icons/prism.svg'
 import iconTao from '../assets/icons/tao.svg'
+import iconChain from '../assets/icons/chain.svg'
 
 const icons = {
   delete: iconDelete,
   prism: iconPrism,
-  tao: iconTao
+  tao: iconTao,
+  chain: iconChain
 }
 
 const spin = keyframes`

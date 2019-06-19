@@ -2,6 +2,8 @@ import { app, Menu, BrowserWindow } from 'electron'
 
 import { createSession, destroySession } from './commands'
 
+import state from './state'
+
 const menu = Menu.buildFromTemplate([
   {
     label: app.getName(),
@@ -57,7 +59,10 @@ const menu = Menu.buildFromTemplate([
         enabled: false,
         click () {
           const window = BrowserWindow.getFocusedWindow()
-          window && window.webContents.openDevTools()
+          if (window) {
+            window.webContents.openDevTools()
+            state.sessions[window.uuid].devTools = true
+          }
         }
       },
       { type: 'separator' },

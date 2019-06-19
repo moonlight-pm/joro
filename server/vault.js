@@ -25,10 +25,13 @@ import { SearchService } from 'bitwarden/services/search.service'
 import { Utils } from 'bitwarden/misc/utils'
 import { LoginCommand } from 'bitwarden/cli/commands/login.command'
 
-const storagePath = resolve(app.getPath('userData'), 'Passwords')
+import ipc from './ipc'
+import state from './state'
 
-export default class Passwords {
-  constructor () {
+export default class Vault {
+  constructor (session) {
+    const storagePath = resolve(app.getPath('userData'), 'Vaults', session)
+    this.session = session
     this.i18nService = new I18nService('en', './locales')
     this.cryptoFunctionService = new NodeCryptoFunctionService()
     this.storageService = new LowdbStorageService(null, storagePath, true)
@@ -58,7 +61,6 @@ export default class Passwords {
   }
 
   async init () {
-    console.log('PASSWORDS INIT')
     this.storageService.init()
     this.containerService.attachToGlobal(global)
     await this.environmentService.setUrlsFromStorage()
@@ -70,7 +72,7 @@ export default class Passwords {
     const command = new LoginCommand(this.authService, this.apiService, this.i18nService)
     const response = await command.run(username, password, { method: null })
     response.raw = process.env.BW_SESSION
-    console.log(response)
+    return response
   }
 
   async search (query) {
@@ -84,6 +86,33 @@ export default class Passwords {
   }
 
   async sync () {
+    process.env.BW_SESSION = state.sessions[this.session].vaultToken
     await this.syncService.fullSync(true)
+    return this.cipherService.getAllDecrypted()
   }
 }
+
+const vaultSessions = {}
+
+function vaultForSession (session) {
+  if (!vaultSessions[session]) {
+    vaultSessions[session] = new Vault(session)
+    vaultSessions[session].init()
+  }
+  return vaultSessions[session]
+}
+
+ipc.register('vault:login', async ({ session, username, password }) => {
+  const vault = vaultForSession(session)
+  const response = await vault.login(username, password)
+  if (response.success) {
+    state.sessions[session].vaultToken = response.raw
+    return true
+  }
+  return false
+})
+
+ipc.register('vault:sync', async ({ session }) => {
+  const vault = vaultForSession(session)
+  return vault.sync()
+})

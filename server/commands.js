@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { resolve } from 'path'
 import { merge } from 'lodash'
 import uuid from 'uuid'
@@ -53,11 +53,14 @@ export function createSession (id = uuid()) {
   window.once('ready-to-show', () => {
     window.show()
   })
+  if (state.sessions[id].devTools) {
+    window.webContents.openDevTools()
+  }
 }
 
 export function destroySession () {
   const window = BrowserWindow.getFocusedWindow()
-  window.webContents.session.clearCache(() => {})
+  window.webContents.session.clearCache(() => { })
   window.webContents.session.clearHostResolverCache()
   window.webContents.session.clearStorageData()
   delete app.windows[window.uuid]
