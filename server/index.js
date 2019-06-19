@@ -6,8 +6,9 @@ import { rm } from 'shelljs'
 import menu from './menu'
 import { createSession } from './commands'
 import state from './state'
+import Passwords from './passwords'
 
-const PRODUCTION = process.env.NODE_ENV === 'production'
+// const PRODUCTION = process.env.NODE_ENV === 'production'
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
 
@@ -17,6 +18,9 @@ for (const partition of readdirSync(resolve(app.getPath('userData'), 'Partitions
     rm('-rf', resolve(app.getPath('userData'), 'Partitions', partition))
   }
 }
+
+const passwords = new Passwords()
+passwords.init()
 
 app.on('ready', () => {
   Menu.setApplicationMenu(menu)

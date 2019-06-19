@@ -1,6 +1,5 @@
 import { app, Menu, BrowserWindow } from 'electron'
 
-// import { store } from '../state'
 import { createSession, destroySession } from './commands'
 
 const menu = Menu.buildFromTemplate([
@@ -79,7 +78,5 @@ app.on('browser-window-focus', () => {
   menu.getMenuItemById('destroy').enabled = true
   menu.getMenuItemById('devtools').enabled = true
 })
-
-// console.log('MENU', )
 
 export default menu

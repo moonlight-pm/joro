@@ -28,6 +28,9 @@ module.exports = {
           ]
         }
       }
+    }, {
+      test: /\.mjs$/,
+      type: 'javascript/auto'
     }]
   },
   plugins: [
