@@ -30,8 +30,9 @@ export default {
 
   delete ({ store, props, get }) {
     const tabs = get(state`tabs`)
-    const index = tabs.order.indexOf(props.id)
-    if (tabs.current === props.id) {
+    const id = props.id || tabs.current
+    const index = tabs.order.indexOf(id)
+    if (tabs.current === id) {
       if (tabs.order.length > 1) {
         if (index === tabs.order.length - 1) {
           store.set(state`tabs.current`, tabs.order[index - 1])
@@ -43,7 +44,7 @@ export default {
       }
     }
     store.splice(state`tabs.order`, index, 1)
-    store.unset(state`tabs.items.${props.id}`)
+    store.unset(state`tabs.items.${id}`)
   },
 
   login ({ get, store, props }) {

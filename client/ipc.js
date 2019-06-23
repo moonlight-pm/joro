@@ -22,9 +22,10 @@ function handler (event, result) {
 const handlers = {}
 const promises = {}
 
-const rpc = new Proxy({}, {
+const ipc = new Proxy({}, {
   get: function (obj, prop) {
     if (prop === 'sync') return sync
+    if (prop === 'on') return (...args) => ipcRenderer.on(...args)
     return new Proxy({}, {
       get: function (obj, subprop) {
         const channel = `${prop}:${subprop}`
@@ -44,4 +45,4 @@ const rpc = new Proxy({}, {
   }
 })
 
-export default rpc
+export default ipc

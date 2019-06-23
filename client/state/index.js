@@ -56,4 +56,12 @@ store.on('mutation', (changes) => {
   ipc.state.save({ data: omit(store.getState(), ['search', 'vault']) })
 })
 
+ipc.on('session:settings', () => {
+  store.getSequence('tabs:create')({ url: 'about:settings', label: 'Joro - Session Settings' })
+})
+
+ipc.on('tabs:delete', () => {
+  store.getSequence('tabs:delete')()
+})
+
 export { Container, connect, store }

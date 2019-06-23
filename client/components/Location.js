@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { HuePicker } from 'react-color'
-import tinycolor from 'tinycolor2'
 
 import { connect } from '../state'
 
@@ -14,19 +12,10 @@ const Location = styled.div`
   border-bottom: 1px solid #00000066;
   position: relative;
   user-select: none;
-  > [name=prism] > div {
-    display: none;
-  }
-  :hover {
-    > [name=prism] > div {
-      display: block;
-    }
-  }
 `
 
-const LocationUrl = styled.div.attrs(({ show, color }) => ({
+const LocationUrl = styled.div.attrs(({ color }) => ({
   style: {
-    visibility: show ? '' : 'hidden',
     color
   }
 }))`
@@ -34,29 +23,6 @@ const LocationUrl = styled.div.attrs(({ show, color }) => ({
   flex-grow: 1;
   line-height: 36px;
   /* text-shadow: 0px 0px 3px black; */
-`
-
-const ColorPicker = styled.div.attrs(({ background, show }) => ({
-  style: {
-    display: show ? 'block' : 'none',
-    background
-  }
-}))`
-  position: absolute;
-  top: 0px;
-  left: 37px;
-  padding: 10px;
-  padding-left: 16px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  -webkit-app-region: none;
-  .hue-horizontal {
-    border: 1px solid black;
-    border-radius: 4px;
-    > div {
-      top: -1px;
-    }
-  }
 `
 
 const VaultLogin = styled.form.attrs(({ show }) => ({
@@ -98,7 +64,6 @@ const VaultMenu = styled.form.attrs(({ show, color }) => ({
 export default connect('sessions', 'tabs', 'colors', 'vault',
   function ({ sessions, tabs, colors, vault }) {
     const usernameInput = useRef()
-    const [showColors, setShowColors] = useState(false)
     const [showVaultLogin, setShowVaultLogin] = useState(false)
     const [showVaultMenu, setShowVaultMenu] = useState(false)
     useEffect(() => {
@@ -110,18 +75,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
     return (
       <Location>
         <div style={{ width: '4px' }} />
-        <Icon
-          name='prism'
-          color={colors.foreground}
-          size={28}
-          margin={4}
-          forceShowInner={showColors}
-          onClick={event => {
-            event.stopPropagation()
-            setShowColors(!showColors)
-          }}
-        />
-        <LocationUrl color={colors.foreground} show={!showColors}>
+        <LocationUrl color={colors.foreground}>
           {tab && tab.url}
         </LocationUrl>
         <Icon
@@ -139,17 +93,6 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
           }}
         />
         <div style={{ width: '4px' }} />
-        <ColorPicker show={showColors} background={colors.background}>
-          <HuePicker
-            color={colors.background}
-            onChange={color => {
-              colors.set({
-                'background': color.hex,
-                'foreground': tinycolor(color.hex.color).getLuminance() < 0.65 ? 'white' : 'black'
-              })
-            }}
-          />
-        </ColorPicker>
         <VaultLogin show={showVaultLogin} onSubmit={event => {
           event.preventDefault()
           setShowVaultLogin(false)

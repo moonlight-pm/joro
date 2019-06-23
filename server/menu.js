@@ -3,6 +3,7 @@ import { app, Menu, BrowserWindow } from 'electron'
 import { createSession, destroySession } from './commands'
 
 import state from './state'
+import ipc from './ipc'
 
 const menu = Menu.buildFromTemplate([
   {
@@ -10,6 +11,19 @@ const menu = Menu.buildFromTemplate([
     submenu: [
       { role: 'about', label: 'About Joro' },
       { label: 'Check for Updates...' },
+      { type: 'separator' },
+      {
+        id: 'devtools',
+        label: 'Open Developer Tools',
+        enabled: false,
+        click () {
+          const window = BrowserWindow.getFocusedWindow()
+          if (window) {
+            window.webContents.openDevTools()
+            state.sessions[window.uuid].devTools = true
+          }
+        }
+      },
       { type: 'separator' },
       { role: 'hide' },
       { role: 'hideothers' },
@@ -33,7 +47,7 @@ const menu = Menu.buildFromTemplate([
     ]
   },
   {
-    label: 'Window',
+    label: 'Session',
     submenu: [
       {
         label: 'New Session',
@@ -44,25 +58,18 @@ const menu = Menu.buildFromTemplate([
       },
       { type: 'separator' },
       {
-        id: 'destroy',
-        label: 'Destroy Session',
-        accelerator: 'CommandOrControl+W',
-        enabled: false,
+        label: 'Settings',
         click () {
-          destroySession()
+          ipc('session:settings')
         }
       },
       { type: 'separator' },
       {
-        id: 'devtools',
-        label: 'Open Developer Tools',
+        id: 'destroy',
+        label: 'Destroy Session',
         enabled: false,
         click () {
-          const window = BrowserWindow.getFocusedWindow()
-          if (window) {
-            window.webContents.openDevTools()
-            state.sessions[window.uuid].devTools = true
-          }
+          destroySession()
         }
       },
       { type: 'separator' },
@@ -70,6 +77,19 @@ const menu = Menu.buildFromTemplate([
       { role: 'zoom' },
       { type: 'separator' },
       { role: 'front' }
+    ]
+  },
+  {
+    label: 'Tab',
+    submenu: [
+      {
+        id: 'destroy',
+        label: 'Close Tab',
+        accelerator: 'CommandOrControl+W',
+        click () {
+          ipc('tabs:delete')
+        }
+      }
     ]
   }
 ])

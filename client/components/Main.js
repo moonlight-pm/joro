@@ -52,7 +52,7 @@ const Main = styled.main.attrs(({ background }) => ({
   left: 0;
   display: flex;
   flex-direction: column;
-  filter: saturate(30%);
+  /* filter: saturate(30%); */
 `
 
 export default connect('sessions', 'search', 'colors',
