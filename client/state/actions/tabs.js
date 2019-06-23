@@ -3,7 +3,7 @@ import uuid from 'uuid'
 
 export default {
   create ({ store, get, props }) {
-    const tab = { id: uuid(), url: props.url, label: props.url }
+    const tab = { id: uuid(), url: props.url, label: props.label }
     store.set(state`tabs.items.${tab.id}`, tab)
     store.push(state`tabs.order`, tab.id)
     store.set(state`tabs.current`, tab.id)

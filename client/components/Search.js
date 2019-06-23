@@ -70,24 +70,21 @@ export default connect('sessions', 'search', 'tabs', 'colors',
               search.previous()
             }
           }
-          if (key === 'enter') {
-            if (search.query.length > 1) {
-              if (search.query.includes('.')) {
-                const url = parseUrl(search.query)
-                tabs.create({ url: url.href })
-              } else if (search.items.length) {
-                tabs.create({ url: search.items[search.index].url })
+          if (key === 'enter' || event.key === 'Enter') {
+            if (search.query.includes('.')) {
+              const url = parseUrl(search.query)
+              if (key === 'meta') {
+                tabs.update({ id: tabs.current, url: url.href, label: url.href })
+              } else {
+                tabs.create({ url: url.href, label: url.href })
               }
-            }
-            search.exit()
-          }
-          if (key === 'meta' && event.key === 'Enter') {
-            if (search.query.length > 1) {
-              if (search.query.includes('.')) {
-                const url = parseUrl(search.query)
-                tabs.update({ id: tabs.current, url: url.href })
-              } else if (search.items.length) {
-                tabs.update({ id: tabs.current, url: search.items[search.index].url })
+            } else if (search.items.length) {
+              const item = search.items[search.index]
+              console.log(item)
+              if (key === 'meta') {
+                tabs.update({ id: tabs.current, url: item.url, label: item.title })
+              } else {
+                tabs.create({ url: item.url, label: item.title })
               }
             }
             search.exit()

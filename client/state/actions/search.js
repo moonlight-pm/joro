@@ -24,6 +24,13 @@ export default {
       store.set(state`search.loading`, false)
       return
     }
+    if (props.query.startsWith('about:')) {
+      store.set(state`search.loading`, false)
+      store.set(state`search.items`, [
+        { url: 'about:session', title: 'Joro - Session Settings', content: '' }
+      ])
+      return
+    }
     searchController = new AbortController()
     store.set(state`search.loading`, true)
     const params = new URLSearchParams()
