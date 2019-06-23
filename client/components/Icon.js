@@ -6,12 +6,14 @@ import iconDelete from '../assets/icons/delete.svg'
 import iconPrism from '../assets/icons/prism.svg'
 import iconTao from '../assets/icons/tao.svg'
 import iconChain from '../assets/icons/chain.svg'
+import iconArrow from '../assets/icons/arrow.svg'
 
 const icons = {
   delete: iconDelete,
   prism: iconPrism,
   tao: iconTao,
-  chain: iconChain
+  chain: iconChain,
+  arrow: iconArrow
 }
 
 const spin = keyframes`
@@ -38,6 +40,8 @@ const Outer = styled.div`
   background: ${props => `${props.background || 'inherit'}`};
   padding: ${props => `${props.margin || 0}`}px;
   -webkit-app-region: none;
+  transform: ${props => props.flip === 'horizontal' && 'scaleX(-1)'};
+
 `
 
 export default ({ ...props }) => (

@@ -75,6 +75,22 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
     return (
       <Location>
         <div style={{ width: '4px' }} />
+        <div style={{ padding: '10px', display: 'flex' }}>
+          <Icon
+            name='arrow'
+            color={colors.foreground}
+            size={16}
+            margin={0}
+          />
+          <div style={{ width: '8px' }} />
+          <Icon
+            name='arrow'
+            color={colors.foreground}
+            size={16}
+            margin={0}
+            flip='horizontal'
+          />
+        </div>
         <LocationUrl color={colors.foreground}>
           {tab && tab.url}
         </LocationUrl>
