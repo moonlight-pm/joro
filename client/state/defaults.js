@@ -17,6 +17,9 @@ export default {
     foreground: 'white'
   },
   vault: {
-    items: null
+    items: null,
+    menu: {
+      show: false
+    }
   }
 }

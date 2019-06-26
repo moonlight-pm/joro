@@ -83,6 +83,13 @@ const menu = Menu.buildFromTemplate([
     label: 'Tab',
     submenu: [
       {
+        label: 'Open Developer Tools',
+        click () {
+          ipc('tabs:devtools')
+        }
+      },
+      { type: 'separator' },
+      {
         id: 'destroy',
         label: 'Close Tab',
         accelerator: 'CommandOrControl+W',

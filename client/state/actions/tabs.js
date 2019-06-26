@@ -78,15 +78,21 @@ export default {
 
   login ({ get, store, props }) {
     const { login } = props
-    const tabs = get(state`tabs`)
-    const i = tabs.order.indexOf(tabs.current)
-    const view = document.querySelectorAll('webview')[i]
+    store.set(state`vault.menu.show`, false)
+    const view = Array.from(document.querySelectorAll('webview')).filter(v => v.style.display === '')[0]
     view.executeJavaScript(`
-      document.querySelector('input[type=email]').value = '${login.username}'
-      document.querySelector('input[type=password]').value = '${login.password}'
-      document.querySelector('[type=submit]').click()
+      const password = document.querySelector('input[type=password]')
+      const username = Array.from(password.form.querySelectorAll('input')).filter(i => ['email', 'text'].includes(i.type))[0]
+      const submit = Array.from(password.form.querySelectorAll('input')).filter(i => ['submit'].includes(i.type))[0]
+      username.value = '${login.username}'
+      password.value = '${login.password}'
+      username.dispatchEvent(new Event('input'), { bubbles: true })
+      password.dispatchEvent(new Event('input'), { bubbles: true })
+      if (submit) {
+        submit.click()
+      } else {
+        password.form.submit()
+      }
     `)
-    // console.log(view)
-    // console.log(login)
   }
 }

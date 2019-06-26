@@ -64,4 +64,8 @@ ipc.on('tabs:delete', () => {
   store.getSequence('tabs:delete')()
 })
 
+ipc.on('tabs:devtools', () => {
+  Array.from(document.querySelectorAll('webview')).filter(v => v.style.display === '')[0].openDevTools()
+})
+
 export { Container, connect, store }

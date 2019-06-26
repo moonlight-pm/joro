@@ -65,7 +65,6 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
   function ({ sessions, tabs, colors, vault }) {
     const usernameInput = useRef()
     const [showVaultLogin, setShowVaultLogin] = useState(false)
-    const [showVaultMenu, setShowVaultMenu] = useState(false)
     useEffect(() => {
       if (showVaultLogin) {
         usernameInput.current.focus()
@@ -104,7 +103,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
           onClick={event => {
             event.stopPropagation()
             if (vault.items) {
-              setShowVaultMenu(!showVaultMenu)
+              vault.menu.show ? vault.hideMenu() : vault.showMenu()
             } else {
               setShowVaultLogin(!showVaultLogin)
             }
@@ -127,7 +126,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
           <input name='password' type='password' />
           <button type='submit' style={{ display: 'none' }} />
         </VaultLogin>
-        <VaultMenu show={showVaultMenu} color={colors.foreground}>
+        <VaultMenu show={vault.menu.show} color={colors.foreground}>
           {/* <span>Logout</span> */}
           {tab && tab.logins && tab.logins.map(l => (
             <span key={l} onClick={() => {

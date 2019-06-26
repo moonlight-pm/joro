@@ -9,5 +9,13 @@ export default {
 
   async sync ({ store, ipc }) {
     store.set(state`vault.items`, await ipc.vault.sync())
+  },
+
+  async showMenu ({ store }) {
+    store.set(state`vault.menu.show`, true)
+  },
+
+  async hideMenu ({ store }) {
+    store.set(state`vault.menu.show`, false)
   }
 }
