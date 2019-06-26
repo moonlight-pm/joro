@@ -3,21 +3,24 @@ import styled from 'styled-components'
 
 import { connect } from '../state'
 
-import Web from './Web'
+import Page from './Page'
 
 const Content = styled.div`
   -webkit-app-region: none;
 `
 
-export default connect('tabs',
-  function ({ tabs }) {
+export default connect('tabs', 'pages',
+  function ({ tabs, pages }) {
     return (
       <Content>
-        {tabs.order.map(id => (
-          tabs.items[id].history.map((url, i) => (
-            <Web key={id + i} id={id} historyIndex={i} show={tabs.current === id && tabs.items[id].current === i} />
-          ))
+        {Object.values(pages).map(page => (
+          <Page key={page.id} id={page.id} show={page.id === tabs.items[tabs.current].current} />
         ))}
+        {/* {tabs.order.map(id => (
+          tabs.items[id].history.map((url, i) => (
+            <Page key={id + i} id={id} historyIndex={i} show={tabs.current === id && tabs.items[id].current === i} />
+          ))
+        ))} */}
       </Content>
     )
   })

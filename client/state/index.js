@@ -62,7 +62,7 @@ ipc.on('session:settings', () => {
 
 ipc.on('tabs:create', () => {
   store.getSequence('tabs:create')({ url: 'about:blank', label: '' })
-  store.getSequence('search:activate')()
+  store.getSequence('search:activate')({})
 })
 
 ipc.on('tabs:delete', () => {

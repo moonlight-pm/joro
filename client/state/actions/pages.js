@@ -2,35 +2,21 @@ import { state } from 'cerebral'
 import uuid from 'uuid'
 
 export default {
-  create ({ store, get, props }) {
-    const tab = {
-      id: uuid(),
-      pages: [],
-      current: null
-    }
-    store.set(state`tabs.items.${tab.id}`, tab)
-    store.push(state`tabs.order`, tab.id)
-    store.set(state`tabs.current`, tab.id)
-  },
-
-  select ({ store, props }) {
-    store.set(state`tabs.current`, props.id)
-  },
-
-  navigate ({ get, store, props }) {
-    const tabs = get(state`tabs`)
-    const tab = tabs.items[tabs.current]
-    const page = {
-      id: uuid(),
-      url: props.url,
-      title: props.title,
-      icon: null,
-      authenticator: false
-    }
-    store.set(state`pages.${page.id}`, page)
-    store.push(state`tabs.items.${tab.id}.pages`, page.id)
-    store.set(state`tabs.items.${tab.id}.current`, page.id)
-  },
+  // create ({ store, get, props }) {
+  //   const tab = {
+  //     id: uuid(),
+  //     url: props.url,
+  //     label: props.label,
+  //     history: [{
+  //       url: props.url,
+  //       label: props.label
+  //     }],
+  //     current: 0
+  //   }
+  //   store.set(state`tabs.items.${tab.id}`, tab)
+  //   store.push(state`tabs.order`, tab.id)
+  //   store.set(state`tabs.current`, tab.id)
+  // },
 
   // forward ({ store, get }) {
   //   const tabs = get(state`tabs`)
@@ -48,6 +34,10 @@ export default {
   //   tab.current -= 1
   //   Object.assign(tab, tab.history[tab.current])
   //   store.set(state`tabs.items.${tab.id}`, tab)
+  // },
+
+  // select ({ store, props }) {
+  //   store.set(state`tabs.current`, props.id)
   // },
 
   // resize ({ store, props }) {
@@ -85,25 +75,24 @@ export default {
   //   store.set(state`tabs.items.${props.id}`, tab)
   // },
 
-  delete ({ store, props, get }) {
-    const tabs = get(state`tabs`)
-    const id = props.id || tabs.current
-    const index = tabs.order.indexOf(id)
-    if (tabs.current === id) {
-      if (tabs.order.length > 1) {
-        if (index === tabs.order.length - 1) {
-          store.set(state`tabs.current`, tabs.order[index - 1])
-        } else {
-          store.set(state`tabs.current`, tabs.order[index + 1])
-        }
-      } else {
-        store.set(state`tabs.current`, null)
-      }
-    }
-    // XXX: Delete pages
-    store.splice(state`tabs.order`, index, 1)
-    store.unset(state`tabs.items.${id}`)
-  }
+  // delete ({ store, props, get }) {
+  //   const tabs = get(state`tabs`)
+  //   const id = props.id || tabs.current
+  //   const index = tabs.order.indexOf(id)
+  //   if (tabs.current === id) {
+  //     if (tabs.order.length > 1) {
+  //       if (index === tabs.order.length - 1) {
+  //         store.set(state`tabs.current`, tabs.order[index - 1])
+  //       } else {
+  //         store.set(state`tabs.current`, tabs.order[index + 1])
+  //       }
+  //     } else {
+  //       store.set(state`tabs.current`, null)
+  //     }
+  //   }
+  //   store.splice(state`tabs.order`, index, 1)
+  //   store.unset(state`tabs.items.${id}`)
+  // },
 
   // login ({ get, store, props }) {
   //   const { login } = props

@@ -5,6 +5,8 @@ export default {
     current: null,
     size: 25
   },
+  pages: {
+  },
   search: {
     query: null,
     loading: false,

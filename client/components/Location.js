@@ -61,7 +61,7 @@ const VaultMenu = styled.form.attrs(({ show, color }) => ({
   }
 `
 
-export default connect('sessions', 'tabs', 'colors', 'vault',
+export default connect('sessions', 'tabs', 'pages', 'colors', 'vault',
   function ({ sessions, tabs, colors, vault }) {
     const usernameInput = useRef()
     const [showVaultLogin, setShowVaultLogin] = useState(false)
@@ -71,6 +71,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
       }
     }, [showVaultLogin])
     const tab = tabs.current && tabs.items[tabs.current]
+    // console.log(tab.history[tab.current].authenticator)
     return (
       <Location>
         <div style={{ width: '4px' }} />
@@ -93,7 +94,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
           />
         </div>
         <LocationUrl color={colors.foreground}>
-          {tab && tab.url}
+          {/* {tab && tab.url} */}
         </LocationUrl>
         <Icon
           name='chain'
@@ -126,14 +127,13 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
           <input name='password' type='password' />
           <button type='submit' style={{ display: 'none' }} />
         </VaultLogin>
-        <VaultMenu show={vault.menu.show} color={colors.foreground}>
-          {/* <span>Logout</span> */}
+        {/* <VaultMenu show={tab && tab.history[tab.current].authenticator} color={colors.foreground}>
           {tab && tab.logins && tab.logins.map(l => (
             <span key={l} onClick={() => {
               tabs.login({ login: vault.items[l].login })
             }}>{vault.items[l].login.username}</span>
           ))}
-        </VaultMenu>
+        </VaultMenu> */}
       </Location>
     )
   })

@@ -7,11 +7,11 @@ let searchController
 
 export default {
   activate ({ store, get }) {
-    const tabs = get(state`tabs`)
+    // const tabs = get(state`tabs`)
     store.set(state`search.active`, true)
-    if (tabs.items[tabs.current]) {
-      store.set(state`search.query`, tabs.items[tabs.current].url)
-    }
+    // if (tabs.items[tabs.current]) {
+    //   store.set(state`search.query`, tabs.items[tabs.current].url)
+    // }
   },
 
   submit: debounce(async function ({ store, props }) {
