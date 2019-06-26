@@ -14,7 +14,9 @@ export default connect('tabs',
     return (
       <Content>
         {tabs.order.map(id => (
-          <Web key={id} id={id} />
+          tabs.items[id].history.map((url, i) => (
+            <Web key={id + i} id={id} historyIndex={i} show={tabs.current === id && tabs.items[id].current === i} />
+          ))
         ))}
       </Content>
     )

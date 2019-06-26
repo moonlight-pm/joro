@@ -4,9 +4,10 @@ import About from './About'
 import { connect } from '../state'
 
 export default connect('tabs',
-  function ({ tabs, id }) {
+  function ({ tabs, id, historyIndex, show }) {
     const web = useRef()
     const tab = tabs.items[id]
+    const url = tab.history[historyIndex]
     useEffect(() => {
       if (web.current) {
         web.current.addEventListener('page-title-updated', ({ title }) => {
@@ -29,11 +30,11 @@ export default connect('tabs',
       // })
     }, [])
     return (
-      tab.url.startsWith('about:')
-        ? <About page={tab.url.replace(/^about:/, '')} show={tabs.current === id} />
-        : <webview ref={web} src={tab.url} style={{
+      url.startsWith('about:')
+        ? <About page={url.replace(/^about:/, '')} show={show} />
+        : <webview ref={web} src={url} style={{
           background: 'white',
-          display: tabs.current === id ? '' : 'none'
+          display: show ? '' : 'none'
         }} />
     )
   })
