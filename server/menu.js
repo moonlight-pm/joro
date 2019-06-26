@@ -83,6 +83,13 @@ const menu = Menu.buildFromTemplate([
     label: 'Tab',
     submenu: [
       {
+        label: 'New Tab',
+        accelerator: 'CommandOrControl+T',
+        click () {
+          ipc('tabs:create')
+        }
+      },
+      {
         label: 'Open Developer Tools',
         click () {
           ipc('tabs:devtools')

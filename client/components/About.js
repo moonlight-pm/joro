@@ -66,26 +66,28 @@ const SectionTitle = styled.div`
 `
 
 export default connect('colors',
-  function ({ colors, show }) {
+  function ({ colors, page, show }) {
     return (
       <About show={show} >
-        <Section>
-          <SectionTitle>Color</SectionTitle>
-          <Swatches>
-            {palette.map((hue, i) => (
-              <SwatchColumn key={i}>
-                {hue.map(color =>
-                  <Swatch key={color} color={color} onClick={() => {
-                    colors.set({
-                      'background': color,
-                      'foreground': mostReadable(color, ['#fff', '#000'], { includeFallbackColors: true }).toHexString()
-                    })
-                  }} />)
-                }
-              </SwatchColumn>
-            ))}
-          </Swatches>
-        </Section>
+        {page === 'settings' &&
+          <Section>
+            <SectionTitle>Color</SectionTitle>
+            <Swatches>
+              {palette.map((hue, i) => (
+                <SwatchColumn key={i}>
+                  {hue.map(color =>
+                    <Swatch key={color} color={color} onClick={() => {
+                      colors.set({
+                        'background': color,
+                        'foreground': mostReadable(color, ['#fff', '#000'], { includeFallbackColors: true }).toHexString()
+                      })
+                    }} />)
+                  }
+                </SwatchColumn>
+              ))}
+            </Swatches>
+          </Section>
+        }
       </About>
     )
   })

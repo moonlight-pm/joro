@@ -7,7 +7,7 @@ export default connect('tabs',
   function ({ tabs, id, historyIndex, show }) {
     const web = useRef()
     const tab = tabs.items[id]
-    const url = tab.history[historyIndex]
+    const url = tab.history[historyIndex].url
     useEffect(() => {
       if (web.current) {
         web.current.addEventListener('page-title-updated', ({ title }) => {

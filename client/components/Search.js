@@ -73,7 +73,7 @@ export default connect('sessions', 'search', 'tabs', 'colors',
           if (key === 'enter' || event.key === 'Enter') {
             if (search.query.includes('.')) {
               const url = parseUrl(search.query)
-              if (key === 'meta') {
+              if (tabs.items[tabs.current]) {
                 tabs.update({ id: tabs.current, url: url.href, label: url.href })
               } else {
                 tabs.create({ url: url.href, label: url.href })
@@ -81,7 +81,7 @@ export default connect('sessions', 'search', 'tabs', 'colors',
             } else if (search.items.length) {
               const item = search.items[search.index]
               console.log(item)
-              if (key === 'meta') {
+              if (tabs.items[tabs.current]) {
                 tabs.update({ id: tabs.current, url: item.url, label: item.title })
               } else {
                 tabs.create({ url: item.url, label: item.title })

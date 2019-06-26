@@ -60,6 +60,11 @@ ipc.on('session:settings', () => {
   store.getSequence('tabs:create')({ url: 'about:settings', label: 'Joro - Session Settings' })
 })
 
+ipc.on('tabs:create', () => {
+  store.getSequence('tabs:create')({ url: 'about:blank', label: '' })
+  store.getSequence('search:activate')()
+})
+
 ipc.on('tabs:delete', () => {
   store.getSequence('tabs:delete')()
 })

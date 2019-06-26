@@ -7,7 +7,10 @@ export default {
       id: uuid(),
       url: props.url,
       label: props.label,
-      history: [props.url],
+      history: [{
+        url: props.url,
+        label: props.label
+      }],
       current: 0
     }
     store.set(state`tabs.items.${tab.id}`, tab)
@@ -20,7 +23,7 @@ export default {
     const tab = tabs.items[tabs.current]
     if (tab.current === tab.history.length - 1) return
     tab.current += 1
-    tab.url = tab.history[tab.current]
+    Object.assign(tab, tab.history[tab.current])
     store.set(state`tabs.items.${tab.id}`, tab)
   },
 
@@ -29,7 +32,7 @@ export default {
     const tab = tabs.items[tabs.current]
     if (tab.current === 0) return
     tab.current -= 1
-    tab.url = tab.history[tab.current]
+    Object.assign(tab, tab.history[tab.current])
     store.set(state`tabs.items.${tab.id}`, tab)
   },
 
@@ -43,10 +46,21 @@ export default {
 
   update ({ store, get, props }) {
     const tab = Object.assign(get(state`tabs.items.${props.id}`), props)
+    console.log(props)
     if (props.url) {
+      if (tab.history.length && tab.history[tab.history.length - 1].url === 'about:blank') {
+        tab.history.pop()
+        tab.current -= 1
+      }
       tab.history = tab.history.slice(0, tab.current + 1)
-      tab.history.push(props.url)
+      tab.history.push({ url: props.url })
       tab.current = tab.history.length - 1
+    }
+    if (props.label) {
+      tab.history[tab.current].label = props.label
+    }
+    if (props.icon) {
+      tab.history[tab.current].icon = props.icon
     }
     const vault = get(state`vault`)
     if (vault.items) {
