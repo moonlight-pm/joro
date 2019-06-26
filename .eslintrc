@@ -1,6 +1,13 @@
 {
-  "extends": ["standard", "standard-react"],
+  "extends": [
+    "standard",
+    "standard-react"
+  ],
   "rules": {
-    "react/prop-types": false
+    "react/prop-types": "off",
+    "space-before-function-paren": [
+      "error",
+      "always"
+    ]
   }
 }

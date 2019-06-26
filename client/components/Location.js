@@ -81,6 +81,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
             color={colors.foreground}
             size={16}
             margin={0}
+            onClick={() => tabs.backward({})}
           />
           <div style={{ width: '8px' }} />
           <Icon
@@ -89,6 +90,7 @@ export default connect('sessions', 'tabs', 'colors', 'vault',
             size={16}
             margin={0}
             flip='horizontal'
+            onClick={() => tabs.forward({})}
           />
         </div>
         <LocationUrl color={colors.foreground}>

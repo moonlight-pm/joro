@@ -3,10 +3,34 @@ import uuid from 'uuid'
 
 export default {
   create ({ store, get, props }) {
-    const tab = { id: uuid(), url: props.url, label: props.label }
+    const tab = {
+      id: uuid(),
+      url: props.url,
+      label: props.label,
+      history: [props.url],
+      current: 0
+    }
     store.set(state`tabs.items.${tab.id}`, tab)
     store.push(state`tabs.order`, tab.id)
     store.set(state`tabs.current`, tab.id)
+  },
+
+  forward ({ store, get }) {
+    const tabs = get(state`tabs`)
+    const tab = tabs.items[tabs.current]
+    if (tab.current === tab.history.length - 1) return
+    tab.current += 1
+    tab.url = tab.history[tab.current]
+    store.set(state`tabs.items.${tab.id}`, tab)
+  },
+
+  backward ({ store, get }) {
+    const tabs = get(state`tabs`)
+    const tab = tabs.items[tabs.current]
+    if (tab.current === 0) return
+    tab.current -= 1
+    tab.url = tab.history[tab.current]
+    store.set(state`tabs.items.${tab.id}`, tab)
   },
 
   select ({ store, props }) {
@@ -19,6 +43,11 @@ export default {
 
   update ({ store, get, props }) {
     const tab = Object.assign(get(state`tabs.items.${props.id}`), props)
+    if (props.url) {
+      tab.history = tab.history.slice(0, tab.current + 1)
+      tab.history.push(props.url)
+      tab.current = tab.history.length - 1
+    }
     const vault = get(state`vault`)
     if (vault.items) {
       tab.logins = Object.values(vault.items)
