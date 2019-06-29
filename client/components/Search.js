@@ -1,10 +1,9 @@
 import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import parseUrl from 'url-parse-lax'
 
-import { connect } from '../state'
+import state from '../state'
+import actions from '../actions'
 
-import Keyboard from './Keyboard'
 import Icon from './Icon'
 
 const Search = styled.div`
@@ -23,23 +22,23 @@ const Input = styled.input`
   padding: 0px 25px;
 `
 
-const SearchInput = connect('search',
-  function ({ search }) {
-    const input = useRef()
-    useEffect(() => {
-      input.current.select()
-      input.current.focus()
-    }, [])
-    return (
-      <Input
-        defaultValue={search.query}
-        ref={input}
-        onChange={event => {
-          search.submit({ query: event.target.value })
-        }}
-      />
-    )
-  })
+function SearchInput () {
+  const { search } = state('search')
+  const input = useRef()
+  useEffect(() => {
+    input.current.select()
+    input.current.focus()
+  }, [])
+  return (
+    <Input
+      defaultValue={search.query}
+      ref={input}
+      onChange={event => {
+        actions.search.submit({ query: event.target.value })
+      }}
+    />
+  )
+}
 
 const Tao = styled(Icon).attrs(({ show }) => ({
   name: 'tao',
@@ -56,43 +55,12 @@ const Tao = styled(Icon).attrs(({ show }) => ({
   }
 `
 
-export default connect('sessions', 'search', 'tabs', 'colors',
-  function ({ sessions, search, tabs, colors }) {
-    return (
-      <Search>
-        <Keyboard handleKeys={['enter', 'ctrl', 'meta']} onKeyEvent={(key, event) => {
-          event.preventDefault()
-          if (key === 'ctrl') {
-            if (event.key === 'n') {
-              search.next()
-            }
-            if (event.key === 'p') {
-              search.previous()
-            }
-          }
-          if (key === 'enter' || event.key === 'Enter') {
-            if (search.query.includes('.')) {
-              const url = parseUrl(search.query)
-              if (tabs.items[tabs.current]) {
-                tabs.update({ id: tabs.current, url: url.href, label: url.href })
-              } else {
-                tabs.create({ url: url.href, label: url.href })
-              }
-            } else if (search.items.length) {
-              const item = search.items[search.index]
-              console.log(item)
-              if (tabs.items[tabs.current]) {
-                tabs.update({ id: tabs.current, url: item.url, label: item.title })
-              } else {
-                tabs.create({ url: item.url, label: item.title })
-              }
-            }
-            search.exit()
-          }
-        }}>
-          <SearchInput />
-        </Keyboard>
-        <Tao show={search.loading} color={colors.background} />
-      </Search>
-    )
-  })
+export default function () {
+  const { search, colors } = state('search', 'colors')
+  return (
+    <Search>
+      <SearchInput />
+      <Tao show={search.loading} color={colors.background} />
+    </Search >
+  )
+}

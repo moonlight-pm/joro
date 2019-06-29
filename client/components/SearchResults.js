@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { connect } from '../state'
+// import { connect } from '../state-old'
+import state from '../state'
 
 const SearchResults = styled.div`
   position: absolute;
@@ -29,21 +30,23 @@ const SearchResultBlurb = styled.div`
   font-size: 0.7em;
 `
 
-export default connect('search',
-  function ({ search }) {
-    return (
-      <>
-        {search.active && <SearchResults items={search.items}>
-          {search.items.map((item, index) => (
-            <SearchResult key={item.url} selected={index === search.index}>
-              <SearchResultTitle>{item.title}</SearchResultTitle>
-              <SearchResultBlurb>{item.content}</SearchResultBlurb>
-              {/* <SearchResultTitle dangerouslySetInnerHTML={{ __html: item.title }} />
+// export default connect('search',
+//   function ({ search }) {
+export default function () {
+  const { search } = state('search')
+  return (
+    <>
+      {search.active && <SearchResults items={search.items}>
+        {search.items.map((item, index) => (
+          <SearchResult key={item.url} selected={index === search.index}>
+            <SearchResultTitle>{item.title}</SearchResultTitle>
+            <SearchResultBlurb>{item.content}</SearchResultBlurb>
+            {/* <SearchResultTitle dangerouslySetInnerHTML={{ __html: item.title }} />
               <SearchResultBlurb dangerouslySetInnerHTML={{ __html: item.blurb }} /> */}
-            </SearchResult>
-          ))}
-        </SearchResults>
-        }
-      </>
-    )
-  })
+          </SearchResult>
+        ))}
+      </SearchResults>
+      }
+    </>
+  )
+}

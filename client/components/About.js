@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { mostReadable } from '@ctrl/tinycolor'
 import * as material from 'material-colors'
 
-import { connect } from '../state'
+import state from '../state'
 
 const palette = [
   [material.red['900'], material.red['700'], material.red['500'], material.red['300'], material.red['100']],
@@ -65,29 +65,27 @@ const SectionTitle = styled.div`
   padding-bottom: 4px;
 `
 
-export default connect('colors',
-  function ({ colors, page, show }) {
-    return (
-      <About show={show} >
-        {page === 'settings' &&
-          <Section>
-            <SectionTitle>Color</SectionTitle>
-            <Swatches>
-              {palette.map((hue, i) => (
-                <SwatchColumn key={i}>
-                  {hue.map(color =>
-                    <Swatch key={color} color={color} onClick={() => {
-                      colors.set({
-                        'background': color,
-                        'foreground': mostReadable(color, ['#fff', '#000'], { includeFallbackColors: true }).toHexString()
-                      })
-                    }} />)
-                  }
-                </SwatchColumn>
-              ))}
-            </Swatches>
-          </Section>
-        }
-      </About>
-    )
-  })
+export default function ({ page, show }) {
+  const { colors } = state('colors')
+  return (
+    <About show={show}>
+      {page === 'settings' &&
+        <Section>
+          <SectionTitle>Color</SectionTitle>
+          <Swatches>
+            {palette.map((hue, i) => (
+              <SwatchColumn key={i}>
+                {hue.map(color =>
+                  <Swatch key={color} color={color} onClick={() => {
+                    colors.background = color
+                    colors.foreground = mostReadable(color, ['#fff', '#000'], { includeFallbackColors: true }).toHexString()
+                  }} />)
+                }
+              </SwatchColumn>
+            ))}
+          </Swatches>
+        </Section>
+      }
+    </About>
+  )
+}

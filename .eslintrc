@@ -8,6 +8,7 @@
     "space-before-function-paren": [
       "error",
       "always"
-    ]
+    ],
+    "no-labels": "off"
   }
 }

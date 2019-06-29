@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { connect } from '../state'
+// import { connect } from '../state'
+import state from '../state'
 
 import Tab from './Tab'
 
@@ -12,13 +13,13 @@ const Tabs = styled.div`
   min-width: 0px;
 `
 
-export default connect('tabs',
-  function ({ tabs }) {
-    return (
-      <Tabs>
-        {tabs.order.map(id => (
-          <Tab key={id} id={id} />
-        ))}
-      </Tabs>
-    )
-  })
+export default function () {
+  const { tabs } = state('tabs')
+  return (
+    <Tabs>
+      {tabs.map(tab => (
+        <Tab key={tab.id} tab={tab} />
+      ))}
+    </Tabs>
+  )
+}

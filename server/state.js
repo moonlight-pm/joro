@@ -2,22 +2,24 @@ import { resolve } from 'path'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { app } from 'electron'
 import { merge } from 'lodash'
-import { Observable } from 'object-observer/dist/node/object-observer'
 
+import observable from '../lib/observable'
 import ipc from './ipc'
 
 const statePath = resolve(app.getPath('userData'), 'state.json')
 
-const state = Observable.from({
+const target = {
   sessions: {}
-})
+}
+
+const state = observable(target)
 
 if (existsSync(statePath)) {
   merge(state, JSON.parse(readFileSync(statePath, 'utf8')))
 }
 
 state.observe(() => {
-  writeFileSync(statePath, JSON.stringify(state, null, 2))
+  writeFileSync(statePath, JSON.stringify(target, null, 2))
 })
 
 ipc.register('state:save', ({ session, data }) => {

@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import Splitter from 'react-split'
 
-import { connect } from '../state'
+// import { connect } from '../state'
+import state from '../state'
 
 import Tabs from './Tabs'
 import Content from './Content'
@@ -19,23 +20,24 @@ const Browser = styled(Splitter)`
   }
 `
 
-export default connect('tabs',
-  function ({ tabs }) {
-    return (
-      <Browser
-        gutterSize={5}
-        sizes={[tabs.size, 100 - tabs.size]}
-        elementStyle={(dimension, size, gutterSize) => {
-          return {
-            'flex-basis': `calc(${size}% - ${gutterSize}px)`
-          }
-        }}
-        onDragEnd={sizes => {
-          tabs.resize({ size: sizes[0] })
-        }}
-      >
-        <Tabs />
-        <Content />
-      </Browser>
-    )
-  })
+export default function () {
+  const { tabs } = state('tabs.size')
+  return (
+    <Browser
+      gutterSize={5}
+      sizes={[tabs.size, 100 - tabs.size]}
+      elementStyle={(dimension, size, gutterSize) => {
+        return {
+          'flex-basis': `calc(${size}% - ${gutterSize}px)`
+        }
+      }}
+      onDragEnd={([size]) => {
+        tabs.size = size
+        // tabs.resize({ size: sizes[0] })
+      }}
+    >
+      <Tabs />
+      <Content />
+    </Browser>
+  )
+}

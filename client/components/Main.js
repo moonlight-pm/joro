@@ -1,43 +1,12 @@
 import React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
-import { connect } from '../state'
+import state from '../state'
 
-import Keyboard from './Keyboard'
 import Search from './Search'
 import Location from './Location'
 import Browser from './Browser'
 import SearchResults from './SearchResults'
-
-import fontFiraSansCondensedRegular from '../assets/fonts/FiraSansCondensed/FiraSansCondensed-Regular.ttf'
-import fontFiraSansCondensedBold from '../assets/fonts/FiraSansCondensed/FiraSansCondensed-Bold.ttf'
-
-const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: 'Fira Sans Condensed';
-    src: url(${fontFiraSansCondensedRegular});
-  }
-
-  @font-face {
-    font-family: 'Fira Sans Condensed';
-    src: url(${fontFiraSansCondensedBold});
-    font-weight: bold;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-family: 'Fira Sans Condensed';
-    box-sizing: border-box;
-    outline: none;
-    font-size: 1em;
-  }
-
-  webview {
-    height: 100%;
-  }
-`
 
 const Main = styled.main.attrs(({ background }) => ({
   style: {
@@ -55,25 +24,14 @@ const Main = styled.main.attrs(({ background }) => ({
   /* filter: saturate(30%); */
 `
 
-export default connect('sessions', 'search', 'colors',
-  function ({ sessions, search, colors }) {
-    return (
-      <Main background={colors.background}>
-        <GlobalStyle />
-        {search.active ? <Search /> : <Location />}
-        <Browser />
-        <SearchResults />
-        <Keyboard handleKeys={['esc', 'meta']} handleFocusableElements onKeyEvent={(key, event) => {
-          console.log(key, event.key)
-          if (key === 'esc') {
-            search.exit()
-          }
-          if (key === 'meta') {
-            if (event.key === 'l') {
-              search.activate()
-            }
-          }
-        }} />
-      </Main>
-    )
-  })
+export default function () {
+  console.log('RENDER')
+  const { search, colors } = state('search.active', 'colors.background')
+  return (
+    <Main background={colors.background}>
+      {search.active ? <Search /> : <Location />}
+      <Browser />
+      <SearchResults />
+    </Main>
+  )
+}

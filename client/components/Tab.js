@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { connect } from '../state'
+import state from '../state'
 
 import Icon from './Icon'
 
-const Tab = styled.div.attrs(({ background, foreground, selected }) => ({
+const Tab = styled.div.attrs(({ background, foreground }) => ({
   style: {
     color: foreground
   }
@@ -57,35 +57,34 @@ const Selected = styled.div`
   border-bottom-right-radius: 5px;
 `
 
-export default connect('sessions', 'tabs', 'colors',
-  function ({ sessions, tabs, colors, id }) {
-    const tab = tabs.items[id]
-    return (
-      <Tab
-        background={colors.background}
-        foreground={colors.foreground}
-        selected={id === tabs.current}
-        onClick={() => tabs.select({ id })}
-      >
-        <div style={{
-          marginRight: '6px',
-          opacity: '0.7',
-          paddingTop: '5px',
-          width: '34px'
-        }}>
-          <img src={tab.icon} style={{
-            height: '28px',
-            borderRadius: '5px'
-          }} />
-        </div>
-        <Label>{tab.label}</Label>
-        <Delete onClick={event => {
-          event.stopPropagation()
-          tabs.delete({ id })
+export default function ({ tab }) {
+  const { tabs, colors } = state('tabs', 'colors')
+  const page = tab.pages.current
+  return (
+    <Tab
+      background={colors.background}
+      foreground={colors.foreground}
+      onClick={() => tabs.select({ id })}
+    >
+      <div style={{
+        marginRight: '6px',
+        opacity: '0.7',
+        paddingTop: '5px',
+        width: '34px'
+      }}>
+        <img src={page.icon} style={{
+          height: '28px',
+          borderRadius: '5px'
         }} />
-        {tabs.current === id &&
-          <Selected color={colors.foreground} />
-        }
-      </Tab>
-    )
-  })
+      </div>
+      <Label>{page.label}</Label>
+      <Delete onClick={event => {
+        event.stopPropagation()
+        tabs.delete({ id })
+      }} />
+      {tab.id === tabs.current.id &&
+        <Selected color={colors.foreground} />
+      }
+    </Tab>
+  )
+}

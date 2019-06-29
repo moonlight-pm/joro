@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { connect } from '../state'
+import state from '../state'
+import actions from '../actions'
 
 import Icon from './Icon'
 
@@ -61,79 +62,77 @@ const VaultMenu = styled.form.attrs(({ show, color }) => ({
   }
 `
 
-export default connect('sessions', 'tabs', 'colors', 'vault',
-  function ({ sessions, tabs, colors, vault }) {
-    const usernameInput = useRef()
-    const [showVaultLogin, setShowVaultLogin] = useState(false)
-    useEffect(() => {
-      if (showVaultLogin) {
-        usernameInput.current.focus()
-      }
-    }, [showVaultLogin])
-    const tab = tabs.current && tabs.items[tabs.current]
-    return (
-      <Location>
-        <div style={{ width: '4px' }} />
-        <div style={{ padding: '10px', display: 'flex' }}>
-          <Icon
-            name='arrow'
-            color={colors.foreground}
-            size={16}
-            margin={0}
-            onClick={() => tabs.backward({})}
-          />
-          <div style={{ width: '8px' }} />
-          <Icon
-            name='arrow'
-            color={colors.foreground}
-            size={16}
-            margin={0}
-            flip='horizontal'
-            onClick={() => tabs.forward({})}
-          />
-        </div>
-        <LocationUrl color={colors.foreground}>
-          {tab && tab.url}
-        </LocationUrl>
+export default function () {
+  const { tabs, colors, vault } = state('tabs', 'colors', 'vault')
+  const usernameInput = useRef()
+  useEffect(() => {
+    if (vault.login.show) {
+      usernameInput.current.focus()
+    }
+  }, [vault.login.show])
+  const tab = tabs.current
+  return (
+    <Location>
+      <div style={{ width: '4px' }} />
+      <div style={{ padding: '10px', display: 'flex' }}>
         <Icon
-          name='chain'
-          color={vault.items ? colors.foreground : '#666666'}
-          size={20}
-          margin={8}
-          onClick={event => {
-            event.stopPropagation()
-            if (vault.items) {
-              vault.menu.show ? vault.hideMenu() : vault.showMenu()
-            } else {
-              setShowVaultLogin(!showVaultLogin)
-            }
-          }}
+          name='arrow'
+          color={colors.foreground}
+          size={16}
+          margin={0}
+          onClick={() => tabs.backward({})}
         />
-        <div style={{ width: '4px' }} />
-        <VaultLogin show={showVaultLogin} onSubmit={event => {
-          event.preventDefault()
-          setShowVaultLogin(false)
-          console.log(event.target.username.value)
-          const username = event.target.username.value.trim()
-          const password = event.target.password.value.trim()
-          if (username && password) {
-            vault.login({ username, password })
+        <div style={{ width: '8px' }} />
+        <Icon
+          name='arrow'
+          color={colors.foreground}
+          size={16}
+          margin={0}
+          flip='horizontal'
+          onClick={() => tabs.forward({})}
+        />
+      </div>
+      <LocationUrl color={colors.foreground}>
+        {tab && tab.pages.current && tab.pages.current.url}
+      </LocationUrl>
+      <Icon
+        name='chain'
+        color={vault.items ? colors.foreground : '#666666'}
+        size={20}
+        margin={8}
+        onClick={event => {
+          event.stopPropagation()
+          if (vault.items) {
+            vault.menu.show = !vault.menu.show
+          } else {
+            vault.login.show = !vault.login.show
           }
-          event.target.username.value = ''
-          event.target.password.value = ''
-        }}>
-          <input name='username' type='email' ref={usernameInput} />
-          <input name='password' type='password' />
-          <button type='submit' style={{ display: 'none' }} />
-        </VaultLogin>
-        <VaultMenu show={vault.menu.show} color={colors.foreground}>
-          {/* <span>Logout</span> */}
-          {tab && tab.logins && tab.logins.map(l => (
-            <span key={l} onClick={() => {
-              tabs.login({ login: vault.items[l].login })
-            }}>{vault.items[l].login.username}</span>
-          ))}
-        </VaultMenu>
-      </Location>
-    )
-  })
+        }}
+      />
+      <div style={{ width: '4px' }} />
+      <VaultLogin show={vault.login.show} onSubmit={event => {
+        event.preventDefault()
+        vault.login.show = false
+        const username = event.target.username.value.trim()
+        const password = event.target.password.value.trim()
+        if (username && password) {
+          actions.vault.login({ username, password })
+        }
+        event.target.username.value = ''
+        event.target.password.value = ''
+      }}>
+        <input name='username' type='email' ref={usernameInput} />
+        <input name='password' type='password' />
+        <button type='submit' style={{ display: 'none' }} />
+      </VaultLogin>
+      <VaultMenu show={vault.menu.show} color={colors.foreground}>
+        {/* <span>Logout</span> */}
+        {tab && tab.logins && tab.logins.map(l => (
+          <span key={l} onClick={() => {
+            tabs.login({ login: vault.items[l].login })
+          }}>{vault.items[l].login.username}</span>
+        ))}
+      </VaultMenu>
+    </Location>
+  )
+}
