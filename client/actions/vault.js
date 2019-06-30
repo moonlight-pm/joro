@@ -7,7 +7,7 @@ async function login ({ username, password }) {
   }
 }
 
-async function sync ({ store, ipc }) {
+async function sync () {
   state.vault.items = await ipc.vault.sync()
 }
 

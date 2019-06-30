@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import { connect } from '../state'
 import state from '../state'
 
 import Page from './Page'
@@ -14,9 +13,9 @@ export default function () {
   const { tabs } = state('tabs')
   return (
     <Content>
-      {tabs.map(tab => (
-        tab.pages.map(page => (
-          <Page key={page.id} page={page} show={tab.id === tabs.current.id && page.id === tab.pages.current.id} />
+      {tabs.list.map(tab => (
+        tab.pages.list.map(page => (
+          <Page key={page.id} tab={tab} page={page} show={tab === tabs.current && page === tab.pages.current} />
         ))
       ))}
     </Content>

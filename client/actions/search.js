@@ -12,6 +12,10 @@ state.observe('search.active', () => {
   }
 })
 
+state.observe('search.index', () => {
+
+})
+
 let searchController
 
 async function submit ({ query }) {
@@ -36,19 +40,21 @@ async function submit ({ query }) {
   const params = new URLSearchParams()
   params.append('format', 'json')
   params.append('q', query)
-  const url = `https://search.blackravenpost.com/?${params}`
+  // const url = `https://search.blackravenpost.com/?${params}`
+  const url = `https://searx.world/?${params}`
   try {
     const response = await fetch(url, { signal: searchController.signal })
     const results = (await response.json()).results
     state.search.loading = false
-    state.search.items = results
+    state.search.items = results.slice(0, 12)
+    state.search.index = 0
   } catch (e) {
   }
 }
 
 function next () {
   if (!state.search.active) return
-  if (state.search.index < 10) {
+  if (state.search.index < state.search.items.length - 1) {
     state.search.index += 1
   }
 }
@@ -61,23 +67,13 @@ function previous () {
 }
 
 function select () {
-  if (state.search.active) return
+  if (!state.search.active) return
   if (state.search.query.includes('.')) {
     const url = parseUrl(state.search.query)
-    actions.tabs.navigate({ url: url.href, label: url.href })
-    //   if(tabs.items[tabs.current]) {
-    //   tabs.update({ id: tabs.current, url: url.href, label: url.href })
-    // } else {
-    //   tabs.create({ url: url.href, label: url.href })
-    // }
+    actions.tabs.navigate({ url: url.href, title: url.href })
   } else if (state.search.items.length) {
     const item = state.search.items[state.search.index]
-    actions.tabs.navigate({ url: item.url, label: item.title })
-    // if (tabs.items[tabs.current]) {
-    //   tabs.update({ id: tabs.current, url: item.url, label: item.title })
-    // } else {
-    //   tabs.create({ url: item.url, label: item.title })
-    // }
+    actions.tabs.navigate({ url: item.url, title: item.title })
   }
   state.search.active = false
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Splitter from 'react-split'
 
-// import { connect } from '../state'
 import state from '../state'
 
 import Tabs from './Tabs'
@@ -33,7 +32,6 @@ export default function () {
       }}
       onDragEnd={([size]) => {
         tabs.size = size
-        // tabs.resize({ size: sizes[0] })
       }}
     >
       <Tabs />

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { debounce } from 'lodash'
+import flatted from 'flatted'
 
 import observable from '../lib/observable'
 import ipc from './ipc'
 
-const target = {
-  tabs: Object.assign([], {
+const target = flatted.parse(ipc.sync.state.load()) || {
+  tabs: {
+    list: [],
     current: null,
     size: 25
-  }),
+  },
   search: {
     query: null,
     loading: false,
@@ -48,9 +50,10 @@ const state = observable(target, {
 })
 
 state.observe(debounce(() => {
-  ipc.state.save({ data: target })
+  ipc.state.save({ data: flatted.stringify(target, null, 2) })
 }, 1000))
 
+window.target = target
 window.state = state
 
 export default state

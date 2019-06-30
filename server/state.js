@@ -23,11 +23,11 @@ state.observe(() => {
 })
 
 ipc.register('state:save', ({ session, data }) => {
-  state.sessions[session].state = data
+  state.sessions[session].state = JSON.parse(data)
 })
 
 ipc.register('state:load', ({ session }) => {
-  return state.sessions[session].state
+  return JSON.stringify(state.sessions[session].state)
 })
 
 export default state

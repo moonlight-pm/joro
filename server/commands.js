@@ -17,7 +17,8 @@ export function createSession (id = uuid()) {
       y: 100,
       width: 1000,
       height: 1000
-    }
+    },
+    state: []
   }, (state.sessions[id] || {}))
   const window = new BrowserWindow({
     show: false,

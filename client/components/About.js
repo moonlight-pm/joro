@@ -65,11 +65,12 @@ const SectionTitle = styled.div`
   padding-bottom: 4px;
 `
 
-export default function ({ page, show }) {
+export default function ({ section, show }) {
+  console.log(section, show)
   const { colors } = state('colors')
   return (
     <About show={show}>
-      {page === 'settings' &&
+      {section === 'settings' &&
         <Section>
           <SectionTitle>Color</SectionTitle>
           <Swatches>

@@ -5,9 +5,6 @@ import { createGlobalStyle } from 'styled-components'
 import fontFiraSansCondensedRegular from './assets/fonts/FiraSansCondensed/FiraSansCondensed-Regular.ttf'
 import fontFiraSansCondensedBold from './assets/fonts/FiraSansCondensed/FiraSansCondensed-Bold.ttf'
 
-import actions from './actions'
-import ipc from './ipc'
-
 import './keyboard'
 
 import Main from './components/Main'
@@ -48,24 +45,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('root')
   )
 })
-
-// store.on('mutation', (changes) => {
-//   ipc.state.save({ data: omit(store.getState(), ['search', 'vault']) })
-// })
-
-ipc.on('session:settings', () => {
-  actions.tabs.create({ url: 'about:settings', label: 'Joro - Session Settings' })
-})
-
-// ipc.on('tabs:create', () => {
-//   store.getSequence('tabs:create')({ url: 'about:blank', label: '' })
-//   store.getSequence('search:activate')()
-// })
-
-// ipc.on('tabs:delete', () => {
-//   store.getSequence('tabs:delete')()
-// })
-
-// ipc.on('tabs:devtools', () => {
-//   Array.from(document.querySelectorAll('webview')).filter(v => v.style.display === '')[0].openDevTools()
-// })

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import { connect } from '../state-old'
 import state from '../state'
 
 const SearchResults = styled.div`
@@ -30,8 +29,6 @@ const SearchResultBlurb = styled.div`
   font-size: 0.7em;
 `
 
-// export default connect('search',
-//   function ({ search }) {
 export default function () {
   const { search } = state('search')
   return (

@@ -71,6 +71,7 @@ export default function () {
     }
   }, [vault.login.show])
   const tab = tabs.current
+  const page = tab.pages.current
   return (
     <Location>
       <div style={{ width: '4px' }} />
@@ -80,7 +81,7 @@ export default function () {
           color={colors.foreground}
           size={16}
           margin={0}
-          onClick={() => tabs.backward({})}
+          onClick={actions.tabs.backward}
         />
         <div style={{ width: '8px' }} />
         <Icon
@@ -89,7 +90,7 @@ export default function () {
           size={16}
           margin={0}
           flip='horizontal'
-          onClick={() => tabs.forward({})}
+          onClick={actions.tabs.forward}
         />
       </div>
       <LocationUrl color={colors.foreground}>
@@ -125,12 +126,12 @@ export default function () {
         <input name='password' type='password' />
         <button type='submit' style={{ display: 'none' }} />
       </VaultLogin>
-      <VaultMenu show={vault.menu.show} color={colors.foreground}>
+      <VaultMenu show={page.logins} color={colors.foreground}>
         {/* <span>Logout</span> */}
-        {tab && tab.logins && tab.logins.map(l => (
-          <span key={l} onClick={() => {
-            tabs.login({ login: vault.items[l].login })
-          }}>{vault.items[l].login.username}</span>
+        {page.logins && page.logins.map(login => (
+          <span key={login.username} onClick={() => {
+            actions.tabs.login(login)
+          }}>{login.username}</span>
         ))}
       </VaultMenu>
     </Location>

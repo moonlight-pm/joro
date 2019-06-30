@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import state from '../state'
+import actions from '../actions'
 
 import Icon from './Icon'
 
@@ -64,7 +65,7 @@ export default function ({ tab }) {
     <Tab
       background={colors.background}
       foreground={colors.foreground}
-      onClick={() => tabs.select({ id })}
+      onClick={() => { tabs.current = tab }}
     >
       <div style={{
         marginRight: '6px',
@@ -72,17 +73,17 @@ export default function ({ tab }) {
         paddingTop: '5px',
         width: '34px'
       }}>
-        <img src={page.icon} style={{
+        <img src={page && page.icon} style={{
           height: '28px',
           borderRadius: '5px'
         }} />
       </div>
-      <Label>{page.label}</Label>
+      <Label>{page && page.title}</Label>
       <Delete onClick={event => {
         event.stopPropagation()
-        tabs.delete({ id })
+        actions.tabs.close(tab)
       }} />
-      {tab.id === tabs.current.id &&
+      {tab === tabs.current &&
         <Selected color={colors.foreground} />
       }
     </Tab>

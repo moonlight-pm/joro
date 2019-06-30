@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import { connect } from '../state'
 import state from '../state'
 
 import Tab from './Tab'
@@ -17,7 +16,7 @@ export default function () {
   const { tabs } = state('tabs')
   return (
     <Tabs>
-      {tabs.map(tab => (
+      {tabs.list.map(tab => (
         <Tab key={tab.id} tab={tab} />
       ))}
     </Tabs>

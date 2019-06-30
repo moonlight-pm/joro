@@ -101,7 +101,7 @@ const menu = Menu.buildFromTemplate([
         label: 'Close Tab',
         accelerator: 'CommandOrControl+W',
         click () {
-          ipc('tabs:delete')
+          ipc('tabs:close')
         }
       }
     ]

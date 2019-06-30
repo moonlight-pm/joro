@@ -15,4 +15,4 @@ keyboard('esc', () => {
 
 keyboard('ctrl+n,down', actions.search.next)
 keyboard('ctrl+p,up', actions.search.previous)
-keyboard('enter', actions.search.select)
+keyboard('enter,return', actions.search.select)
