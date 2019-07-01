@@ -7,13 +7,15 @@ import iconPrism from '../assets/icons/prism.svg'
 import iconTao from '../assets/icons/tao.svg'
 import iconChain from '../assets/icons/chain.svg'
 import iconArrow from '../assets/icons/arrow.svg'
+import iconFind from '../assets/icons/find.svg'
 
 const icons = {
   delete: iconDelete,
   prism: iconPrism,
   tao: iconTao,
   chain: iconChain,
-  arrow: iconArrow
+  arrow: iconArrow,
+  find: iconFind
 }
 
 const spin = keyframes`

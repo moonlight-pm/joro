@@ -89,7 +89,7 @@ export default class Vault {
     if (!state.sessions[this.session].vaultToken) return null
     process.env.BW_SESSION = state.sessions[this.session].vaultToken
     await this.syncService.fullSync(true)
-    return await this.cipherService.getAllDecrypted()
+    return this.cipherService.getAllDecrypted()
   }
 }
 

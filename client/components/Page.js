@@ -1,10 +1,28 @@
 import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
-import About from './About'
-
 import actions from '../actions'
 import state from '../state'
+
+import About from './About'
+import Icon from './Icon'
+
+const Find = styled.div`
+  position: absolute;
+  display: flex;
+  top: 0;
+  right: 0;
+  background: ${props => props.background};
+  color: ${props => props.foreground};
+  padding: 10px 12px 10px 4px;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0px 2px 7px 3px rgba(0,0,0,0.4);
+  input {
+    width: 200px;
+    border-radius: 3px;
+    padding: 0px 8px;
+  }
+`
 
 const Status = styled.div`
   position: absolute;
@@ -19,6 +37,7 @@ const Status = styled.div`
 
 export default function ({ tab, page, show }) {
   const web = useRef()
+  const find = useRef()
   const { colors } = state('colors')
   useEffect(() => {
     if (web.current) {
@@ -57,6 +76,9 @@ export default function ({ tab, page, show }) {
           delete page.logins
         }
       })
+      web.current.addEventListener('found-in-page', result => {
+        console.log('FIND', result)
+      })
     }
     // web.current.addEventListener('did-navigate', async () => {
     //   const session = web.current.getWebContents().session
@@ -66,6 +88,11 @@ export default function ({ tab, page, show }) {
     //   }
     // })
   }, [])
+  useEffect(() => {
+    if (page.find) {
+      find.current.focus()
+    }
+  }, [page.find])
   return (
     page.url.startsWith('about:')
       ? <About section={page.url.replace(/^about:/, '')} show={show} />
@@ -74,6 +101,20 @@ export default function ({ tab, page, show }) {
           background: 'white',
           display: show ? '' : 'none'
         }} />
+        {page.find &&
+          <Find foreground={colors.foreground} background={colors.background}>
+            <Icon
+              name='find'
+              color={colors.foreground}
+              size={20}
+              margin={4}
+            />
+            <div style={{ width: '2px' }} />
+            <input ref={find} onChange={(event) => {
+              page.find.text = event.target.value
+            }} />
+          </Find>
+        }
         {page.target && <Status foreground={colors.foreground} background={colors.background}>{page.target}</Status>}
       </>
   )
