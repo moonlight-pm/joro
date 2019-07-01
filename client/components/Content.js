@@ -7,10 +7,11 @@ import Page from './Page'
 
 const Content = styled.div`
   -webkit-app-region: none;
+  position: relative;
 `
 
 export default function () {
-  const { tabs } = state('tabs.list')
+  const { tabs } = state('tabs')
   return (
     <Content>
       {tabs.list.map(tab => (

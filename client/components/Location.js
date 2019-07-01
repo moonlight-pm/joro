@@ -63,7 +63,7 @@ const VaultMenu = styled.form.attrs(({ show, color }) => ({
 `
 
 export default function () {
-  const { tabs, colors, vault } = state('tabs.current', 'colors.foreground', 'vault.login.show')
+  const { tabs, colors, vault } = state('tabs', 'colors.foreground', 'vault.login.show')
   const usernameInput = useRef()
   useEffect(() => {
     if (vault.login.show) {
@@ -71,7 +71,7 @@ export default function () {
     }
   }, [vault.login.show])
   const tab = tabs.current
-  const page = tab.pages.current
+  const page = tab && tab.pages.current
   return (
     <Location>
       <div style={{ width: '4px' }} />
@@ -94,7 +94,7 @@ export default function () {
         />
       </div>
       <LocationUrl color={colors.foreground}>
-        {tab && tab.pages.current && tab.pages.current.url}
+        {page && page.url}
       </LocationUrl>
       <Icon
         name='chain'
@@ -126,9 +126,9 @@ export default function () {
         <input name='password' type='password' />
         <button type='submit' style={{ display: 'none' }} />
       </VaultLogin>
-      <VaultMenu show={page.logins} color={colors.foreground}>
+      <VaultMenu show={page && page.logins} color={colors.foreground}>
         {/* <span>Logout</span> */}
-        {page.logins && page.logins.map(login => (
+        {page && page.logins && page.logins.map(login => (
           <span key={login.username} onClick={() => {
             actions.tabs.login(login)
           }}>{login.username}</span>
