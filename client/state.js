@@ -26,9 +26,6 @@ const target = flatted.parse(ipc.sync.state.load()) || {
     items: null,
     login: {
       show: false
-    },
-    menu: {
-      show: false
     }
   }
 }
@@ -42,9 +39,10 @@ const state = observable(target, {
       }
       state.observe(...namespaces, fn)
       return () => {
+        console.log('UNOBSERVE', namespaces)
         state.unobserve(...namespaces, fn)
       }
-    })
+    }, [count])
     return state
   }
 })

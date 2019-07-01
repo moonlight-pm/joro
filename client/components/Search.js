@@ -23,7 +23,7 @@ const Input = styled.input`
 `
 
 function SearchInput () {
-  const { search } = state('search')
+  const { search } = state('search.query')
   const input = useRef()
   useEffect(() => {
     input.current.select()
@@ -56,7 +56,7 @@ const Tao = styled(Icon).attrs(({ show }) => ({
 `
 
 export default function () {
-  const { search, colors } = state('search', 'colors')
+  const { search, colors } = state('search.loading', 'colors.background')
   return (
     <Search>
       <SearchInput />

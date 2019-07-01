@@ -10,7 +10,7 @@ const Content = styled.div`
 `
 
 export default function () {
-  const { tabs } = state('tabs')
+  const { tabs } = state('tabs.list')
   return (
     <Content>
       {tabs.list.map(tab => (

@@ -13,7 +13,7 @@ const Tabs = styled.div`
 `
 
 export default function () {
-  const { tabs } = state('tabs')
+  const { tabs } = state('tabs.list')
   return (
     <Tabs>
       {tabs.list.map(tab => (

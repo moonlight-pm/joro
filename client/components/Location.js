@@ -63,7 +63,7 @@ const VaultMenu = styled.form.attrs(({ show, color }) => ({
 `
 
 export default function () {
-  const { tabs, colors, vault } = state('tabs', 'colors', 'vault')
+  const { tabs, colors, vault } = state('tabs.current', 'colors.foreground', 'vault.login.show')
   const usernameInput = useRef()
   useEffect(() => {
     if (vault.login.show) {

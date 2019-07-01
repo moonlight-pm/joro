@@ -66,8 +66,7 @@ const SectionTitle = styled.div`
 `
 
 export default function ({ section, show }) {
-  console.log(section, show)
-  const { colors } = state('colors')
+  const { colors } = state
   return (
     <About show={show}>
       {section === 'settings' &&

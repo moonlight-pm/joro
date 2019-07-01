@@ -59,7 +59,7 @@ const Selected = styled.div`
 `
 
 export default function ({ tab }) {
-  const { tabs, colors } = state('tabs', 'colors')
+  const { tabs, colors } = state('tabs.current', 'colors')
   const page = tab.pages.current
   return (
     <Tab

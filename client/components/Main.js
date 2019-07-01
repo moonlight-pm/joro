@@ -25,7 +25,6 @@ const Main = styled.main.attrs(({ background }) => ({
 `
 
 export default function () {
-  console.log('RENDER')
   const { search, colors } = state('search.active', 'colors.background')
   return (
     <Main background={colors.background}>
