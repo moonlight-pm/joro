@@ -1,31 +1,47 @@
 import state from '../state'
+import ipc from '../ipc'
 
 function search (findNext = false) {
+  const page = state.tabs.current && state.tabs.current.pages.current
+  if (!(page && page.find && page.find.active)) return
   const view = Array.from(document.querySelectorAll('webview')).filter(v => v.style.display === '')[0]
-  const page = state.tabs.current.pages.current
-  const text = page.find && page.find.text
-  if (text) {
+  if (page.find.text) {
     view.findInPage(page.find.text, { findNext })
   } else {
     view.stopFindInPage('clearSelection')
   }
 }
 
-state.observe('tabs.current.pages.current.find', () => {
-  search()
+state.observe('tabs.current.pages.current.find/text', find => {
+  if (find.active) search()
 })
 
 function find () {
-  state.tabs.current.pages.current.find = {
-    text: ''
-  }
+  const page = state.tabs.current && state.tabs.current.pages.current
+  if (!page) return
+  page.find.active = true
+  page.find.text = ''
 }
 
-function next () {
+function findNext () {
+  const page = state.tabs.current && state.tabs.current.pages.current
+  if (!(page && page.find && page.find.active)) return
   search(true)
 }
 
+function cancelFind () {
+  const page = state.tabs.current && state.tabs.current.pages.current
+  if (!(page && page.find && page.find.active)) return
+  const view = Array.from(document.querySelectorAll('webview')).filter(v => v.style.display === '')[0]
+  view.stopFindInPage('clearSelection')
+  page.find.active = false
+}
+
+ipc.on('page:find', find)
+ipc.on('page:findNext', findNext)
+
 export default {
   find,
-  next
+  findNext,
+  cancelFind
 }

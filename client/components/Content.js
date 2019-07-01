@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 
 import Page from './Page'
 
@@ -11,7 +11,7 @@ const Content = styled.div`
 `
 
 export default function () {
-  const { tabs } = state('tabs')
+  const { tabs } = useSharedState('tabs/current', 'tabs.current.pages/current')
   return (
     <Content>
       {tabs.list.map(tab => (

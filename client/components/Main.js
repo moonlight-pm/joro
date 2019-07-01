@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 
 import Search from './Search'
 import Location from './Location'
@@ -25,7 +25,7 @@ const Main = styled.main.attrs(({ background }) => ({
 `
 
 export default function () {
-  const { search, colors } = state('search.active', 'colors.background')
+  const { search, colors } = useSharedState('search', 'colors')
   return (
     <Main background={colors.background}>
       {search.active ? <Search /> : <Location />}

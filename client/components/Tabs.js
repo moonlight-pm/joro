@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 
 import Tab from './Tab'
 
@@ -13,7 +13,7 @@ const Tabs = styled.div`
 `
 
 export default function () {
-  const { tabs } = state('tabs.list')
+  const { tabs } = useSharedState('tabs')
   return (
     <Tabs>
       {tabs.list.map(tab => (

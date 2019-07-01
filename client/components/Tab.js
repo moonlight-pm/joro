@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 import actions from '../actions'
 
 import Icon from './Icon'
@@ -59,7 +59,7 @@ const Selected = styled.div`
 `
 
 export default function ({ tab }) {
-  const { tabs, colors } = state('tabs.current', 'colors')
+  const { tabs, colors } = useSharedState('tabs.current.pages/current', 'colors')
   const page = tab.pages.current
   return (
     <Tab

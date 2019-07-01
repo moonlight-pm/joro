@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Splitter from 'react-split'
 
-import state from '../state'
+import { useSharedState } from '../state'
 
 import Tabs from './Tabs'
 import Content from './Content'
@@ -20,7 +20,7 @@ const Browser = styled(Splitter)`
 `
 
 export default function () {
-  const { tabs } = state('tabs.size')
+  const { tabs } = useSharedState('tabs')
   return (
     <Browser
       gutterSize={5}

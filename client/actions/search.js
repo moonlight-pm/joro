@@ -4,6 +4,8 @@ import parseUrl from 'url-parse-lax'
 import debounce from 'lodash/debounce'
 
 import state from '../state'
+import ipc from '../ipc'
+
 import actions from '.'
 
 state.observe('search.active', () => {
@@ -77,6 +79,13 @@ function select () {
   }
   state.search.active = false
 }
+
+ipc.on('search:activate', () => {
+  if (!state.tabs.current) {
+    actions.tabs.create({ url: 'about:blank', title: '' })
+  }
+  state.search.active = true
+})
 
 export default {
   submit: debounce(submit, 200),

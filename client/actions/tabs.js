@@ -4,12 +4,17 @@ import { first, last } from 'lodash'
 import state from '../state'
 import ipc from '../ipc'
 
-function create ({ url, title }) {
-  const page = {
+function createPage (url, title) {
+  return {
     id: uuid(),
     url,
-    title
+    title,
+    find: {}
   }
+}
+
+function create ({ url, title }) {
+  const page = createPage(url, title)
   const tab = {
     id: uuid(),
     pages: {
@@ -47,11 +52,7 @@ function close (tab) {
 function navigate ({ url, title }) {
   const tabs = state.tabs
   const tab = tabs.current
-  const page = {
-    id: uuid(),
-    url,
-    title
-  }
+  const page = createPage(url, title)
   tab.pages.list.splice(tab.pages.list.indexOf(tab.pages.current) + 1, Number.MAX_SAFE_INTEGER)
     .forEach(page => delete tab.pages[page.id])
   if (tab.pages.list.length === 1 && tab.pages.current.url === 'about:blank') {

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 
 const SearchResults = styled.div`
   position: absolute;
@@ -30,7 +30,7 @@ const SearchResultBlurb = styled.div`
 `
 
 export default function () {
-  const { search } = state('search')
+  const { search } = useSharedState('search')
   return (
     <>
       {search.active && <SearchResults items={search.items}>

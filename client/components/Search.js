@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 import actions from '../actions'
 
 import Icon from './Icon'
@@ -23,7 +23,7 @@ const Input = styled.input`
 `
 
 function SearchInput () {
-  const { search } = state('search.query')
+  const { search } = useSharedState('search')
   const input = useRef()
   useEffect(() => {
     input.current.select()
@@ -56,7 +56,7 @@ const Tao = styled(Icon).attrs(({ show }) => ({
 `
 
 export default function () {
-  const { search, colors } = state('search.loading', 'colors.background')
+  const { search, colors } = useSharedState('search', 'colors')
   return (
     <Search>
       <SearchInput />

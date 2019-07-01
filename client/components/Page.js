@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
 import actions from '../actions'
-import state from '../state'
+import { useSharedState } from '../state'
 
 import About from './About'
 import Icon from './Icon'
@@ -36,11 +36,26 @@ const Status = styled.div`
 `
 
 export default function ({ tab, page, show }) {
+  console.log('RENDER PAGE')
   const web = useRef()
   const find = useRef()
-  const { colors } = state('colors')
+  const { colors, vault } = useSharedState('colors', 'vault', page, page.find)
   useEffect(() => {
+    console.log('PAGE EFFECT', page.url)
     if (web.current) {
+      web.current.addEventListener('dom-ready', () => {
+        web.current.executeJavaScript(`
+          if (document.querySelector('input[type=password]')) {
+            console.log('joro:login')
+          } else {
+            console.log('joro:nologin')
+          }
+          window.addEventListener('scroll', event => {
+            console.log('joro:scroll:' + window.scrollY)
+          })
+          //window.scrollY = ${page.scroll || 0}
+        `)
+      })
       web.current.addEventListener('page-title-updated', ({ title }) => {
         page.title = title
       })
@@ -52,21 +67,11 @@ export default function ({ tab, page, show }) {
         actions.tabs.navigate({ url, title: url })
       })
       web.current.addEventListener('update-target-url', ({ url }) => {
-        console.log('TARGET', url)
         page.target = url
       })
-      const logins = state.vault.items
+      const logins = vault.items
         .filter(item => item.login && item.login.uris && item.login.uris.filter(uri => page.url.includes(uri._uri)).length)
         .map(item => ({ username: item.login.username, password: item.login.password }))
-      web.current.addEventListener('dom-ready', () => {
-        web.current.executeJavaScript(`
-          if (document.querySelector('input[type=password]')) {
-            console.log('joro:login')
-          } else {
-            console.log('joro:nologin')
-          }
-        `)
-      })
       web.current.addEventListener('console-message', ({ message }) => {
         console.log(`[${page.url}] ${message}`)
         if (message === 'joro:login' && logins.length) {
@@ -75,24 +80,17 @@ export default function ({ tab, page, show }) {
         if (message === 'joro:nologin') {
           delete page.logins
         }
-      })
-      web.current.addEventListener('found-in-page', result => {
-        console.log('FIND', result)
+        if (message.startsWith('joro:scroll')) {
+          page.scroll = message.split(':')[2]
+        }
       })
     }
-    // web.current.addEventListener('did-navigate', async () => {
-    //   const session = web.current.getWebContents().session
-    //   const cookies = await session.cookies.get({})
-    //   for (const cookie of cookies) {
-    //     console.log(cookie.domain, cookie.path, cookie.name)
-    //   }
-    // })
-  }, [])
+  }, [page])
   useEffect(() => {
-    if (page.find) {
+    if (find.current) {
       find.current.focus()
     }
-  }, [page.find])
+  }, [page.find && page.find.active])
   return (
     page.url.startsWith('about:')
       ? <About section={page.url.replace(/^about:/, '')} show={show} />
@@ -101,7 +99,7 @@ export default function ({ tab, page, show }) {
           background: 'white',
           display: show ? '' : 'none'
         }} />
-        {page.find &&
+        {page.find && page.find.active && show &&
           <Find foreground={colors.foreground} background={colors.background}>
             <Icon
               name='find'
@@ -110,7 +108,7 @@ export default function ({ tab, page, show }) {
               margin={4}
             />
             <div style={{ width: '2px' }} />
-            <input ref={find} onChange={(event) => {
+            <input ref={find} defaultValue={page.find.text} onChange={(event) => {
               page.find.text = event.target.value
             }} />
           </Find>

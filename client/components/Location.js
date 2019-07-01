@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import state from '../state'
+import { useSharedState } from '../state'
 import actions from '../actions'
 
 import Icon from './Icon'
@@ -63,13 +63,13 @@ const VaultMenu = styled.form.attrs(({ show, color }) => ({
 `
 
 export default function () {
-  const { tabs, colors, vault } = state('tabs', 'colors.foreground', 'vault.login.show')
+  const { tabs, colors, vault } = useSharedState('tabs.current.pages/current', 'colors', 'vault')
   const usernameInput = useRef()
   useEffect(() => {
-    if (vault.login.show) {
+    if (vault.login) {
       usernameInput.current.focus()
     }
-  }, [vault.login.show])
+  }, [vault.login])
   const tab = tabs.current
   const page = tab && tab.pages.current
   return (
@@ -103,17 +103,13 @@ export default function () {
         margin={8}
         onClick={event => {
           event.stopPropagation()
-          if (vault.items) {
-            vault.menu.show = !vault.menu.show
-          } else {
-            vault.login.show = !vault.login.show
-          }
+          vault.login = !vault.login
         }}
       />
       <div style={{ width: '4px' }} />
-      <VaultLogin show={vault.login.show} onSubmit={event => {
+      <VaultLogin show={vault.login} onSubmit={event => {
         event.preventDefault()
-        vault.login.show = false
+        vault.show = false
         const username = event.target.username.value.trim()
         const password = event.target.password.value.trim()
         if (username && password) {

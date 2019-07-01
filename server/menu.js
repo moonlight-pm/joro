@@ -43,7 +43,22 @@ const menu = Menu.buildFromTemplate([
       { role: 'paste' },
       { role: 'pasteandmatchstyle' },
       { role: 'delete' },
-      { role: 'selectall' }
+      { role: 'selectall' },
+      {
+        label: 'Find in Page',
+        accelerator: 'Command+F',
+        click () {
+          ipc('page:find')
+        }
+      },
+      {
+        label: 'Find Next in Page',
+        accelerator: 'Command+G',
+        click () {
+          ipc('page:findNext')
+        }
+      }
+
     ]
   },
   {
@@ -89,6 +104,14 @@ const menu = Menu.buildFromTemplate([
           ipc('tabs:create')
         }
       },
+      {
+        label: 'Location Search',
+        accelerator: 'CommandOrControl+L',
+        click () {
+          ipc('search:activate')
+        }
+      },
+      { type: 'separator' },
       {
         label: 'Open Developer Tools',
         click () {

@@ -24,28 +24,26 @@ const target = flatted.parse(ipc.sync.state.load()) || {
   },
   vault: {
     items: null,
-    login: {
-      show: false
-    }
+    login: false
   }
 }
 
-const state = observable(target, {
-  apply: (...namespaces) => {
-    const [count, setCount] = useState(0)
-    useEffect(() => {
-      function fn () {
-        setCount(count + 1)
-      }
-      state.observe(...namespaces, fn)
-      return () => {
-        console.log('UNOBSERVE', namespaces)
-        state.unobserve(...namespaces, fn)
-      }
-    }, [count])
-    return state
-  }
-})
+const state = observable(target)
+
+export function useSharedState (...namespaces) {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    function fn () {
+      setCount(count + 1)
+    }
+    state.observe(...namespaces, fn)
+    return () => {
+      // console.log('UNOBSERVE', namespaces)
+      state.unobserve(...namespaces, fn)
+    }
+  }, [count])
+  return state
+}
 
 state.observe(debounce(() => {
   ipc.state.save({ data: flatted.stringify(target, null, 2) })
