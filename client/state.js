@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { debounce } from 'lodash'
-import flatted from 'flatted'
+import dry from 'json-dry'
 
 import observable from '../lib/observable'
 import ipc from './ipc'
 
-const target = flatted.parse(ipc.sync.state.load()) || {
+const target = Object.assign({
   tabs: {
     list: [],
     current: null,
@@ -26,7 +26,7 @@ const target = flatted.parse(ipc.sync.state.load()) || {
     items: null,
     login: false
   }
-}
+}, dry.parse(ipc.sync.state.load()))
 
 const state = observable(target)
 
@@ -46,7 +46,7 @@ export function useSharedState (...namespaces) {
 }
 
 state.observe(debounce(() => {
-  ipc.state.save({ data: flatted.stringify(target, null, 2) })
+  ipc.state.save({ data: dry.stringify(target, null, 2) })
 }, 1000))
 
 window.target = target

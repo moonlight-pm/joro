@@ -53,7 +53,7 @@ export default function ({ tab, page, show }) {
           window.addEventListener('scroll', event => {
             console.log('joro:scroll:' + window.scrollY)
           })
-          //window.scrollY = ${page.scroll || 0}
+          window.scroll(0, ${page.scroll || 0})
         `)
       })
       web.current.addEventListener('page-title-updated', ({ title }) => {
