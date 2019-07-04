@@ -36,12 +36,12 @@ const Status = styled.div`
 `
 
 export default function ({ tab, page, show }) {
-  console.log('RENDER PAGE')
+  // console.log('RENDER PAGE')
   const web = useRef()
   const find = useRef()
   const { colors, vault } = useSharedState('colors', 'vault', page, page.find)
   useEffect(() => {
-    console.log('PAGE EFFECT', page.url)
+    // console.log('PAGE EFFECT', page.url)
     if (web.current) {
       web.current.addEventListener('dom-ready', () => {
         web.current.executeJavaScript(`
@@ -69,7 +69,7 @@ export default function ({ tab, page, show }) {
       web.current.addEventListener('update-target-url', ({ url }) => {
         page.target = url
       })
-      const logins = vault.items
+      const logins = (vault.items || [])
         .filter(item => item.login && item.login.uris && item.login.uris.filter(uri => page.url.includes(uri._uri)).length)
         .map(item => ({ username: item.login.username, password: item.login.password }))
       web.current.addEventListener('console-message', ({ message }) => {
