@@ -107,17 +107,19 @@ export default function () {
         }}
       />
       <div style={{ width: '4px' }} />
-      <VaultLogin show={vault.login} onSubmit={event => {
-        event.preventDefault()
-        vault.show = false
-        const username = event.target.username.value.trim()
-        const password = event.target.password.value.trim()
-        if (username && password) {
-          actions.vault.login({ username, password })
-        }
-        event.target.username.value = ''
-        event.target.password.value = ''
-      }}>
+      <VaultLogin
+        show={vault.login} onSubmit={event => {
+          event.preventDefault()
+          vault.show = false
+          const username = event.target.username.value.trim()
+          const password = event.target.password.value.trim()
+          if (username && password) {
+            actions.vault.login({ username, password })
+          }
+          event.target.username.value = ''
+          event.target.password.value = ''
+        }}
+      >
         <input name='username' type='email' ref={usernameInput} />
         <input name='password' type='password' />
         <button type='submit' style={{ display: 'none' }} />
@@ -125,9 +127,12 @@ export default function () {
       <VaultMenu show={page && page.logins} color={colors.foreground}>
         {/* <span>Logout</span> */}
         {page && page.logins && page.logins.map(login => (
-          <span key={login.username} onClick={() => {
-            actions.tabs.login(login)
-          }}>{login.username}</span>
+          <span
+            key={login.username} onClick={() => {
+              actions.tabs.login(login)
+            }}
+          >{login.username}
+          </span>
         ))}
       </VaultMenu>
     </Location>

@@ -6,7 +6,7 @@ import fontFiraSansCondensedRegular from './assets/fonts/FiraSansCondensed/FiraS
 import fontFiraSansCondensedBold from './assets/fonts/FiraSansCondensed/FiraSansCondensed-Bold.ttf'
 
 import './keyboard'
-
+import model, { Provider } from './model'
 import Main from './components/Main'
 
 const GlobalStyle = createGlobalStyle`
@@ -38,10 +38,10 @@ const GlobalStyle = createGlobalStyle`
 
 document.addEventListener('DOMContentLoaded', async () => {
   ReactDOM.render(
-    <>
+    <Provider value={model}>
       <GlobalStyle />
       <Main />
-    </>,
+    </Provider>,
     document.querySelector('root')
   )
 })

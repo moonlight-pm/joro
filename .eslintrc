@@ -9,6 +9,7 @@
       "error",
       "always"
     ],
-    "no-labels": "off"
+    "no-labels": "off",
+    "react/jsx-handler-names": "off"
   }
 }
