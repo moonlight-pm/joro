@@ -1,7 +1,8 @@
-/* global fetch AbortController */
-
+import got from 'got'
 import parseUrl from 'url-parse-lax'
 import debounce from 'lodash/debounce'
+import { scrapeHTML } from 'scrape-it'
+import cheerio from 'cheerio'
 
 import state from '../state'
 import ipc from '../ipc'
@@ -18,13 +19,10 @@ state.observe('search.index', () => {
 
 })
 
-let searchController
+let request
 
 async function submit ({ query }) {
   state.search.query = query
-  if (searchController) {
-    searchController.abort()
-  }
   if (query.length < 2 || query.includes('.')) {
     state.search.loading = false
     state.search.items = []
@@ -37,19 +35,32 @@ async function submit ({ query }) {
     ]
     return
   }
-  searchController = new AbortController()
   state.search.loading = true
   const params = new URLSearchParams()
-  params.append('format', 'json')
-  params.append('q', query)
-  // const url = `https://search.blackravenpost.com/?${params}`
-  const url = `https://searx.world/?${params}`
+  params.append('term', query)
+  const url = `https://www.runnaroo.com/search?${params}`
+  if (request && !request.isCanceled) {
+    request.cancel()
+  }
+  request = got(url)
   try {
-    const response = await fetch(url, { signal: searchController.signal })
-    const results = (await response.json()).results
-    state.search.loading = false
-    state.search.items = results.slice(0, 12)
+    const result = await request
+    const data = await scrapeHTML(cheerio.load(result.body), {
+      items: {
+        listItem: '.card-body',
+        data: {
+          title: 'h5',
+          content: {
+            texteq: 0
+          },
+          url: '.text-success'
+        }
+      }
+    })
+    console.log('DATA', data)
+    state.search.items = data.items
     state.search.index = 0
+    state.search.loading = false
   } catch (e) {
   }
 }

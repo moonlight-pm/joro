@@ -1,5 +1,4 @@
 const { resolve } = require('path')
-const Visualizer = require('webpack-visualizer-plugin')
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
 
@@ -32,10 +31,5 @@ module.exports = {
       test: /\.mjs$/,
       type: 'javascript/auto'
     }]
-  },
-  plugins: [
-    new Visualizer({
-      filename: '../main.html'
-    })
-  ]
+  }
 }

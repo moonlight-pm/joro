@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 
 const sync = new Proxy({}, {
   get: function (obj, prop) {

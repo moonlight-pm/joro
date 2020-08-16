@@ -1,6 +1,5 @@
 const { resolve } = require('path')
 const HtmlPlugin = require('html-webpack-plugin')
-const VisualizerPlugin = require('webpack-visualizer-plugin')
 const { DefinePlugin } = require('webpack')
 const LodashPlugin = require('lodash-webpack-plugin')
 
@@ -46,9 +45,6 @@ module.exports = {
     }),
     new DefinePlugin({
       __REACT_DEVTOOLS_GLOBAL_HOOK__: '({ isDisabled: true })'
-    }),
-    new VisualizerPlugin({
-      filename: '../renderer.html'
     }),
     new LodashPlugin()
   ],

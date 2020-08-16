@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { resolve } from 'path'
 import { merge } from 'lodash'
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 
 import state from './state'
 
@@ -42,7 +42,7 @@ export function createSession (id = uuid()) {
       extraHeaders: 'pragma: no-cache\n'
     })
   } else {
-    window.loadURL(`http://localhost:9999`)
+    window.loadURL('http://localhost:9999')
   }
   app.windows[id] = window
   window.on('moved', (event, bounds) => {

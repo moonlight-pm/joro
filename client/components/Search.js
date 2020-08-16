@@ -61,6 +61,6 @@ export default function () {
     <Search>
       <SearchInput />
       <Tao show={search.loading} color={colors.background} />
-    </Search >
+    </Search>
   )
 }

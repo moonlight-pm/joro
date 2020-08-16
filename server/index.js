@@ -1,7 +1,7 @@
 import { Menu, app } from 'electron'
 import { readdirSync } from 'fs'
 import { resolve } from 'path'
-import { rm } from 'shelljs'
+import { rm, mkdir } from 'shelljs'
 
 import menu from './menu'
 import { createSession } from './commands'
@@ -11,9 +11,12 @@ import './vault'
 
 // const PRODUCTION = process.env.NODE_ENV === 'production'
 
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
-for (const partition of readdirSync(resolve(app.getPath('userData'), 'Partitions'))) {
+const partitionsPath = resolve(app.getPath('userData'), 'Partitions')
+mkdir('-p', partitionsPath)
+
+for (const partition of readdirSync(partitionsPath)) {
   if (!state.sessions[partition]) {
     console.log('DELETING', resolve(app.getPath('userData'), 'Partitions', partition))
     rm('-rf', resolve(app.getPath('userData'), 'Partitions', partition))

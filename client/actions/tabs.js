@@ -1,4 +1,4 @@
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import { first, last } from 'lodash'
 
 import state from '../state'
